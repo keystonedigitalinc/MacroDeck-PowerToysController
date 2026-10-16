@@ -19,20 +19,15 @@ internal sealed class DiskFileStore : IFileStore
 		return reader.ReadToEnd();
 	}
 
-	/// <summary>Writes beside the target, then swaps it in, so a watcher never reads half a file.</summary>
+	/// <summary>
+	/// Writes the file in place, the way PowerToys Settings does. Awake watches for in-place writes only;
+	/// replacing the file through a temp file went unnoticed. Readers already retry half-written files.
+	/// </summary>
 	public void Write(string path, string content)
 	{
 		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-		var temp = path + ".tmp-" + Environment.ProcessId;
-		try
-		{
-			File.WriteAllText(temp, content);
-			File.Move(temp, path, overwrite: true);
-		}
-		catch
-		{
-			File.Delete(temp);
-			throw;
-		}
+		using var stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Read | FileShare.Delete);
+		using var writer = new StreamWriter(stream);
+		writer.Write(content);
 	}
 }

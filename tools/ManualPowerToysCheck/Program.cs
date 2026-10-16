@@ -62,12 +62,16 @@ switch (args)
 		return 0;
 	}
 
+	case ["--module", var module, var state]:
+		Console.WriteLine($"set {module} {state}: {await pt.Modules.SetAsync(module, state, CancellationToken.None)}");
+		return 0;
+
 	case ["--module-roundtrip", var module]:
 		Console.WriteLine($"toggle {module}: {await pt.Modules.SetAsync(module, "toggle", CancellationToken.None)}");
 		Console.WriteLine($"toggle back: {await pt.Modules.SetAsync(module, "toggle", CancellationToken.None)}");
 		return 0;
 
 	default:
-		Console.WriteLine("Usage: ManualPowerToysCheck --state | --fire <Tool> | --awake-roundtrip | --theme-roundtrip | --layout-roundtrip <monitor> | --module-roundtrip <Module>");
+		Console.WriteLine("Usage: ManualPowerToysCheck --state | --fire <Tool> | --awake-roundtrip | --theme-roundtrip | --layout-roundtrip <monitor> | --module <Module> <on|off|toggle> | --module-roundtrip <Module>");
 		return 2;
 }

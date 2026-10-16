@@ -56,7 +56,14 @@ internal sealed class AwakeAction(PowerToysComponents components, TimeProvider t
 	{
 		public async Task<ActionResult> ExecuteAsync(ActionExecutionContext context)
 		{
-			if (Results.Gate(components.State.Current) is { } blocked) return blocked;
+			var snapshot = components.State.Current;
+			if (Results.Gate(snapshot) is { } blocked) return blocked;
+
+			// Awake ignores its settings while the module is off, so writing them would be a false success.
+			if (snapshot.Enabled.TryGetValue("Awake", out var on) && !on)
+			{
+				return ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff("Awake"));
+			}
 
 			var mode = (ParameterReader.String(context.Parameters, ModeParameter) ?? "indefinite") switch
 			{

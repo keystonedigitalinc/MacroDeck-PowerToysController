@@ -18,6 +18,10 @@ public sealed partial class Phase1ActionTests
 		outcome.Error?.Code
 		?? (outcome.Data is { ValueKind: JsonValueKind.Object } data && data.TryGetProperty("errorCode", out var code) ? code.GetString() : null);
 
+	// The settings fixture has Awake switched off, as on the machine it came from.
+	private static void AwakeOn(TestRig rig) => rig.Files.Files[TestRig.Paths.GeneralSettings] =
+		EnableMap.WithModule(rig.Files.Files[TestRig.Paths.GeneralSettings], "Awake", true);
+
 	internal static async Task<(PluginTestHarness Harness, TestRig Rig)> ReadyAsync(Action<TestRig>? arrange = null)
 	{
 		var rig = new TestRig();
@@ -86,7 +90,7 @@ public sealed partial class Phase1ActionTests
 	[Test]
 	public async Task Awake_timed_45_confirms()
 	{
-		var (harness, rig) = await ReadyAsync();
+		var (harness, rig) = await ReadyAsync(AwakeOn);
 		await using var _h = harness;
 
 		var outcome = await harness.Actions.ExecuteAsync("awake", P(("mode", "timed"), ("minutes", 45), ("display-on", true)));
@@ -101,7 +105,7 @@ public sealed partial class Phase1ActionTests
 	[Test]
 	public async Task Awake_until_with_a_bad_time_is_InvalidParameter()
 	{
-		var (harness, _) = await ReadyAsync();
+		var (harness, _) = await ReadyAsync(AwakeOn);
 		await using var _h = harness;
 
 		Assert.That(ErrorCode(await harness.Actions.ExecuteAsync("awake", P(("mode", "until"), ("until", "25:99")))), Is.EqualTo(ActionErrorCodes.InvalidParameter));
