@@ -5,6 +5,7 @@ using KeystoneDigital.PowerToysController.Locator;
 using KeystoneDigital.PowerToysController.Modules;
 using KeystoneDigital.PowerToysController.State;
 using KeystoneDigital.PowerToysController.Theme;
+using KeystoneDigital.PowerToysController.Workspaces;
 
 namespace KeystoneDigital.PowerToysController;
 
@@ -16,4 +17,5 @@ internal sealed record PowerToysComponents(
 	AwakeControl Awake,
 	ThemeControl Theme,
 	ModuleToggle Modules,
-	FancyZonesControl FancyZones);
+	FancyZonesControl FancyZones,
+	WorkspacesControl Workspaces);

@@ -20,6 +20,7 @@ public sealed class PowerToysIntegration : IPluginIntegration, IVariableProvider
 			new ModuleAction(components),
 			new ApplyLayoutAction(components),
 			new OpenZoneEditorAction(components),
+			new LaunchWorkspaceAction(components),
 		];
 	}
 

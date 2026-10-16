@@ -7,6 +7,7 @@ using KeystoneDigital.PowerToysController.Modules;
 using KeystoneDigital.PowerToysController.Processes;
 using KeystoneDigital.PowerToysController.State;
 using KeystoneDigital.PowerToysController.Theme;
+using KeystoneDigital.PowerToysController.Workspaces;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -30,7 +31,7 @@ internal static class Services
 				PowerToysLocator.IsPolicyForced, TimeProvider.System);
 			var fancyZones = new FancyZonesControl(files, paths, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);
 			var state = new StateService(locator, awake, theme, modules, logger, fancyZones.MonitorsAsync);
-			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules, fancyZones);
+			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules, fancyZones, new WorkspacesControl(files, paths, new WmiProcessStarter()));
 		});
 		services.AddHostedService(sp => sp.GetRequiredService<PowerToysComponents>().State);
 		return services;

@@ -187,4 +187,16 @@
   <data name="Errors.CliFailed" xml:space="preserve">
     <value>FancyZones could not apply the layout: {detail}</value>
   </data>
+  <data name="Actions.LaunchWorkspace.Name" xml:space="preserve">
+    <value>Launch PowerToys Workspace</value>
+  </data>
+  <data name="Actions.LaunchWorkspace.Description" xml:space="preserve">
+    <value>Opens a saved PowerToys Workspace: its apps, in their saved positions.</value>
+  </data>
+  <data name="Actions.LaunchWorkspace.Workspace.Label" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="Actions.LaunchWorkspace.NoneSaved" xml:space="preserve">
+    <value>No Workspaces saved yet. Create one in PowerToys Workspaces first.</value>
+  </data>
 </root>
