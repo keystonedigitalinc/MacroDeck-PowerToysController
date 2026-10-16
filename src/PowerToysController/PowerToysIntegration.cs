@@ -1,20 +1,31 @@
+using KeystoneDigital.PowerToysController.Variables;
 using MacroDeck.Sdk;
 using MacroDeck.Sdk.Actions;
+using MacroDeck.Sdk.Variables;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KeystoneDigital.PowerToysController;
 
-public sealed class PowerToysIntegration : IPluginIntegration
+public sealed class PowerToysIntegration : IPluginIntegration, IVariableProvider
 {
-	internal PowerToysIntegration()
+	internal PowerToysIntegration(PowerToysComponents components)
 	{
+		Components = components;
 		Actions = [];
 	}
 
 	public IReadOnlyList<IActionDefinition> Actions { get; }
 
-	public static PowerToysIntegration Create(IServiceProvider services) => new();
+	public IReadOnlyList<VariableDefinition> Variables => PowerToysVariables.Definitions;
 
-	public Task InitializeAsync(IIntegrationContext context) => Task.CompletedTask;
+	internal PowerToysComponents Components { get; }
+
+	public static PowerToysIntegration Create(IServiceProvider services) => new(services.GetRequiredService<PowerToysComponents>());
+
+	public Task InitializeAsync(IIntegrationContext context) => Components.State.RefreshAsync(CancellationToken.None);
 
 	public Task ShutdownAsync() => Task.CompletedTask;
+
+	public ValueTask<VariableReading> ReadAsync(string localId, CancellationToken cancellationToken = default) =>
+		ValueTask.FromResult(PowerToysVariables.Read(localId, Components.State.Current));
 }

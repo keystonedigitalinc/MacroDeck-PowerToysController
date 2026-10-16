@@ -36,7 +36,9 @@ internal sealed class FakeRunner : IRunnerControl, IPowerToysProcesses
 
 	public bool IsRunnerRunning() => Running;
 
-	public bool IsRunnerElevated() => false;
+	public bool Elevated { get; set; }
+
+	public bool IsRunnerElevated() => Running && Elevated;
 
 	public IReadOnlyList<int> RunnerProcessIds() => Running ? [1234] : [];
 }

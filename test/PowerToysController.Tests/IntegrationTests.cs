@@ -6,10 +6,10 @@ namespace KeystoneDigital.PowerToysController.Tests;
 [TestFixture]
 public sealed class IntegrationTests
 {
-	internal static PluginTestHarness CreateHarness(Action<Microsoft.Extensions.DependencyInjection.IServiceCollection>? services = null) =>
+	internal static PluginTestHarness CreateHarness(TestRig? rig = null) =>
 		PluginTestHarness.Create(builder =>
 		{
-			services?.Invoke(builder.Services);
+			builder.Services.AddPowerToysComponents((rig ?? new TestRig()).Components);
 			builder.UseLocalization(Strings.LocalizationCatalog).RegisterIntegration(PowerToysIntegration.Create);
 		});
 
