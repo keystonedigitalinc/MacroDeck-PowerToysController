@@ -62,11 +62,27 @@ internal static class FancyZonesData
 				layoutId = Str(layout, "type") == "custom" ? Str(layout, "uuid") : Str(layout, "type");
 			}
 
-			monitors.Add(new MonitorLayout(index, name, serial, desktop, layoutId,
+			monitors.Add(new MonitorLayout(index, name, serial, instance, desktop, layoutId,
 				layoutId is null ? null : layouts.FirstOrDefault(l => string.Equals(l.Id, layoutId, StringComparison.OrdinalIgnoreCase))?.Name ?? layoutId));
 		}
 
 		return monitors;
+	}
+
+	/// <summary>
+	/// The monitor a saved button means. An exact key wins; otherwise the name and serial must pick exactly
+	/// one monitor, which covers keys saved before the instance id was part of them and a monitor whose
+	/// instance id changed after a replug. Two identical monitors without serials are ambiguous: null.
+	/// </summary>
+	public static MonitorLayout? Resolve(IReadOnlyList<MonitorLayout> monitors, string key)
+	{
+		if (monitors.FirstOrDefault(m => m.Key == key) is { } exact) return exact;
+
+		var parts = key.Split('|');
+		if (parts.Length < 2) return null;
+
+		var candidates = monitors.Where(m => m.Monitor == parts[0] && (m.Serial ?? "") == parts[1]).ToList();
+		return candidates.Count == 1 ? candidates[0] : null;
 	}
 
 	private static string TemplateName(string type) => type switch

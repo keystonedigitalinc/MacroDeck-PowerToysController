@@ -30,9 +30,9 @@ internal static class Services
 			var theme = new ThemeControl(new EventTrigger(new WindowsNamedEventOpener()), new RegistryThemeReader(), TimeProvider.System);
 			var modules = new ModuleToggle(files, PowerToysLocator.FindInstalled, processes, new WindowsRunnerControl(new WmiProcessStarter(), table),
 				PowerToysLocator.IsPolicyForced, TimeProvider.System);
-			var fancyZones = new FancyZonesControl(files, paths, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);
-			var state = new StateService(locator, awake, theme, modules, logger, fancyZones.MonitorsAsync);
-			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules, fancyZones, new WorkspacesControl(files, paths, new WmiProcessStarter()));
+			var fancyZones = new FancyZonesControl(files, PowerToysLocator.FindInstalled, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);
+			var state = new StateService(locator, awake, theme, modules, logger, _ => Task.FromResult(fancyZones.CurrentMonitors()));
+			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules, fancyZones, new WorkspacesControl(files, PowerToysLocator.FindInstalled, new WmiProcessStarter()));
 		});
 		services.AddHostedService(sp => sp.GetRequiredService<PowerToysComponents>().State);
 		return services;

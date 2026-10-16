@@ -8,7 +8,7 @@ namespace KeystoneDigital.PowerToysController.Tests.FancyZones;
 [TestFixture]
 public sealed class FancyZonesActionTests
 {
-	private static readonly string[] MonitorOptions = ["all", "AOC2702|SERIAL-A", "AOC2402|SERIAL-B"];
+	private static readonly string[] MonitorOptions = ["all", "AOC2702|SERIAL-A|INSTANCE-1", "AOC2402|SERIAL-B|INSTANCE-2"];
 
 	private static List<string?> OptionValues(MacroDeck.Plugin.Testing.CapabilityInvocationOutcome outcome)
 	{

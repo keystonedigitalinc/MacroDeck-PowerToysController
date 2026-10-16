@@ -24,7 +24,15 @@ internal sealed class DiskFileStore : IFileStore
 	{
 		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		var temp = path + ".tmp-" + Environment.ProcessId;
-		File.WriteAllText(temp, content);
-		File.Move(temp, path, overwrite: true);
+		try
+		{
+			File.WriteAllText(temp, content);
+			File.Move(temp, path, overwrite: true);
+		}
+		catch
+		{
+			File.Delete(temp);
+			throw;
+		}
 	}
 }

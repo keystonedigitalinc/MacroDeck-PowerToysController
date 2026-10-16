@@ -11,8 +11,14 @@ internal sealed class FakeStarter : IProcessStarter
 {
 	public List<(string CommandLine, string Directory)> Started { get; } = [];
 
+	public bool Throw { get; set; }
+
+	public ManualResetEventSlim? Gate { get; set; }
+
 	public bool Start(string commandLine, string workingDirectory)
 	{
+		if (Throw) throw new System.Management.ManagementException("WMI unavailable");
+		Gate?.Wait(TimeSpan.FromSeconds(5));
 		Started.Add((commandLine, workingDirectory));
 		return true;
 	}
@@ -35,7 +41,7 @@ public sealed class WorkspacesTests
 		var files = new FakeFileStore();
 		if (json is not null) files.Files[TestRig.Paths.WorkspacesFile] = json;
 		var starter = new FakeStarter();
-		return (new WorkspacesControl(files, TestRig.Paths, starter), starter);
+		return (new WorkspacesControl(files, () => TestRig.Paths, starter), starter);
 	}
 
 	[Test]

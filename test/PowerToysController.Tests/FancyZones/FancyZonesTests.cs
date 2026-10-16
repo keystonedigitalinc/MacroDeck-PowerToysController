@@ -93,7 +93,7 @@ public sealed class FancyZonesTests
 		Seed(files);
 		var cli = new FakeCli(files, Paths);
 		var signals = new FakeSignals();
-		return (new FancyZonesControl(files, Paths, cli, signals, TimeProvider.System, TimeSpan.Zero, TimeSpan.FromMilliseconds(300)), cli, signals, files);
+		return (new FancyZonesControl(files, () => Paths, cli, signals, TimeProvider.System, TimeSpan.Zero, TimeSpan.FromMilliseconds(300)), cli, signals, files);
 	}
 
 	[Test]
@@ -116,7 +116,7 @@ public sealed class FancyZonesTests
 
 		Assert.That(signals.Saves, Is.EqualTo(1));
 		Assert.That(monitors.Select(m => (m.Index, m.Monitor, m.ActiveLayoutName)), Is.EqualTo(new[] { (1, "AOC2702", "Stacked"), (2, "AOC2402", "Stacked") }));
-		Assert.That(monitors[0].Key, Is.EqualTo("AOC2702|SERIAL-A"));
+		Assert.That(monitors[0].Key, Is.EqualTo("AOC2702|SERIAL-A|INSTANCE-1"));
 	}
 
 	[Test]

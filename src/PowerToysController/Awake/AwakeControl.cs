@@ -88,7 +88,7 @@ internal sealed class AwakeControl(IFileStore files, PowerToysPaths paths, TimeP
 				if (text is null) return null;
 				if (Parse(text) is { } root) return root;
 			}
-			catch (IOException)
+			catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
 			{
 				// Awake or PowerToys is writing the file right now.
 			}
@@ -109,7 +109,7 @@ internal sealed class AwakeControl(IFileStore files, PowerToysPaths paths, TimeP
 				files.Write(paths.AwakeSettings, content);
 				return;
 			}
-			catch (IOException) when (time.GetUtcNow() < deadline)
+			catch (Exception ex) when ((ex is IOException or UnauthorizedAccessException) && time.GetUtcNow() < deadline)
 			{
 				await Task.Delay(RetryEvery, ct).ConfigureAwait(false);
 			}

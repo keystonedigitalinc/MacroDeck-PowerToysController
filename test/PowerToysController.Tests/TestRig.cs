@@ -33,9 +33,9 @@ internal sealed class TestRig
 		var awake = new AwakeControl(Files, Paths, TimeProvider.System);
 		var theme = new ThemeControl(new EventTrigger(Theme), Theme, TimeProvider.System, TimeSpan.FromMilliseconds(300));
 		var modules = new ModuleToggle(Files, find, Runner, Runner, _ => false, TimeProvider.System, TimeSpan.FromMilliseconds(300));
-		var fancyZones = new FancyZonesControl(Files, Paths, Cli, new FakeSignals(), TimeProvider.System, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
-		var state = new StateService(locator, awake, theme, modules, Serilog.Core.Logger.None, fancyZones.MonitorsAsync);
-		Components = new PowerToysComponents(locator, state, trigger, awake, theme, modules, fancyZones, new WorkspacesControl(Files, Paths, Starter));
+		var fancyZones = new FancyZonesControl(Files, find, Cli, Signals, TimeProvider.System, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
+		var state = new StateService(locator, awake, theme, modules, Serilog.Core.Logger.None, _ => Task.FromResult(fancyZones.CurrentMonitors()));
+		Components = new PowerToysComponents(locator, state, trigger, awake, theme, modules, fancyZones, new WorkspacesControl(Files, find, Starter));
 	}
 
 	public FakeFileStore Files { get; } = new();
@@ -45,6 +45,8 @@ internal sealed class TestRig
 	public FakeCli Cli { get; }
 
 	public FakeStarter Starter { get; } = new();
+
+	public FakeSignals Signals { get; } = new();
 
 	public FakeEventOpener Events { get; } = new();
 

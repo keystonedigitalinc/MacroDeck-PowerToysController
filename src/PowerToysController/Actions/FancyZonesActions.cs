@@ -29,18 +29,19 @@ internal sealed class ApplyLayoutAction(PowerToysComponents components) : IDynam
 	public IActionExecutor CreateExecutor() => new Executor(components);
 
 	// Layout and monitor names are content from FancyZones, so they travel as literal labels.
-	public Task<DynamicOptionsResult> GetDynamicOptionsAsync(DynamicOptionsContext context, CancellationToken cancellationToken)
+	public async Task<DynamicOptionsResult> GetDynamicOptionsAsync(DynamicOptionsContext context, CancellationToken cancellationToken)
 	{
 		if (context.ParameterName == LayoutParameter)
 		{
-			return Task.FromResult(new DynamicOptionsResult
+			return new DynamicOptionsResult
 			{
 				Options = [.. components.FancyZones.Layouts().Select(layout => new ActionParameterOption { Value = layout.Id, Label = layout.Name })],
-			});
+			};
 		}
 
 		var options = new List<ActionParameterOption> { Results.Option(AllMonitors, Strings.Actions.ApplyLayout.AllMonitors()) };
-		options.AddRange(components.State.Current.Monitors.Select(m => new ActionParameterOption { Value = m.Key, Label = $"{m.Index}: {m.Monitor}" }));
+		var monitors = await components.FancyZones.MonitorsAsync(cancellationToken).ConfigureAwait(false);
+		options.AddRange(monitors.Select(m => new ActionParameterOption { Value = m.Key, Label = $"{m.Index}: {m.Monitor}" }));
 
 		// A saved monitor that is unplugged stays visible instead of silently blanking the field.
 		var current = ParameterReader.String(context.CurrentParameters ?? new Dictionary<string, object?>(), MonitorParameter);
@@ -49,14 +50,19 @@ internal sealed class ApplyLayoutAction(PowerToysComponents components) : IDynam
 			options.Add(Results.Option(current, Strings.Actions.ApplyLayout.MonitorMissing(current.Split('|')[0])));
 		}
 
-		return Task.FromResult(new DynamicOptionsResult { Options = options });
+		return new DynamicOptionsResult { Options = options };
 	}
 
 	private sealed class Executor(PowerToysComponents components) : IActionExecutor
 	{
 		public async Task<ActionResult> ExecuteAsync(ActionExecutionContext context)
 		{
-			if (Results.Gate(components.State.Current) is { } blocked) return blocked;
+			var snapshot = components.State.Current;
+			if (Results.Gate(snapshot) is { } blocked) return blocked;
+			if (snapshot.Enabled.TryGetValue("FancyZones", out var on) && !on)
+			{
+				return ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff("FancyZones"));
+			}
 
 			if (ParameterReader.String(context.Parameters, LayoutParameter) is not { } layout) return Results.Invalid(Strings.Actions.ApplyLayout.Layout.Label());
 			if (ParameterReader.String(context.Parameters, MonitorParameter) is not { } monitor) return Results.Invalid(Strings.Actions.ApplyLayout.Monitor.Label());
@@ -70,6 +76,7 @@ internal sealed class ApplyLayoutAction(PowerToysComponents components) : IDynam
 				LayoutOutcome.NotFound => ActionResult.Failed(ActionErrorCodes.NotFound, Strings.Errors.NotFound()),
 				LayoutOutcome.CliFailed => ActionResult.Failed(ActionErrorCodes.ProviderError, Strings.Errors.CliFailed(components.FancyZones.LastCliOutput?.Trim() ?? "")),
 				LayoutOutcome.NotRunning => ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff("FancyZones")),
+				LayoutOutcome.NotInstalled => ActionResult.Failed(ActionErrorCodes.NotConfigured, Strings.Errors.NotInstalled()),
 				_ => Results.NotApplied(),
 			};
 		}

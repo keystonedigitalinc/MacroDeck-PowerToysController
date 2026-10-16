@@ -25,7 +25,15 @@ internal sealed class ProcessRunner : IProcessRunner
 			},
 		};
 
-		process.Start();
+		try
+		{
+			process.Start();
+		}
+		catch (System.ComponentModel.Win32Exception ex)
+		{
+			return (-1, ex.Message);
+		}
+
 		var output = process.StandardOutput.ReadToEndAsync(ct);
 		var error = process.StandardError.ReadToEndAsync(ct);
 

@@ -8,10 +8,10 @@ using Serilog;
 namespace KeystoneDigital.PowerToysController.State;
 
 /// <summary>One monitor as FancyZones numbers it, and the layout applied to it there.</summary>
-internal sealed record MonitorLayout(int Index, string Monitor, string? Serial, string VirtualDesktop, string? ActiveLayoutId, string? ActiveLayoutName)
+internal sealed record MonitorLayout(int Index, string Monitor, string? Serial, string? Instance, string VirtualDesktop, string? ActiveLayoutId, string? ActiveLayoutName)
 {
-	/// <summary>Identifies the monitor across renumbering: what a button stores.</summary>
-	public string Key => Monitor + "|" + Serial;
+	/// <summary>Identifies the monitor across renumbering: what a button stores. See FancyZonesData.Resolve.</summary>
+	public string Key => Monitor + "|" + Serial + "|" + Instance;
 }
 
 internal sealed record PowerToysSnapshot(

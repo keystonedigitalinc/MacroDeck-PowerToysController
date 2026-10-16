@@ -23,9 +23,12 @@ internal sealed class FakeFileStore : IFileStore
 
 	public Exception? WriteError { get; set; }
 
+	public Queue<Exception> WriteErrorsOnce { get; } = new();
+
 	public void Write(string path, string content)
 	{
 		if (WriteError is not null) throw WriteError;
+		if (WriteErrorsOnce.Count > 0) throw WriteErrorsOnce.Dequeue();
 		Writes++;
 		Files[path] = content;
 	}
