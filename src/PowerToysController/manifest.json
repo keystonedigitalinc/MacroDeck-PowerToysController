@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schemas.macro-deck.app/plugin-manifest-v1.schema.json",
+  "manifestVersion": 1,
+  "id": "com.keystonedigital.powertoys",
+  "name": "PowerToys Control (unofficial)",
+  "version": "0.1.0",
+  "description": "Control Microsoft PowerToys from Macro Deck: launch Color Picker, Text Extractor, Screen Ruler, Command Palette and other tools without hotkeys, set Awake, switch the theme, turn modules on or off, apply FancyZones layouts and launch Workspaces. Not affiliated with or endorsed by Microsoft.",
+  "icon": "Assets/icon.png",
+  "entrypoints": {
+    "win-x64": {
+      "executable": "runtimes/win-x64/PowerToysController.dll",
+      "runtime": {
+        "kind": "FrameworkDependent",
+        "dotnetVersion": "10.0"
+      }
+    }
+  },
+  "publisher": {
+    "name": "Keystone Digital"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/keystonedigitalinc/MacroDeck-PowerToysController",
+  "compatibility": {
+    "macroDeck": ">=3.0.0-0"
+  },
+  "permissions": [],
+  "ai": {
+    "interaction": false,
+    "generatedContent": false,
+    "generatedAssets": true
+  }
+}

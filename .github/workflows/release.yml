@@ -1,0 +1,21 @@
+name: Release
+
+# Publishing a GitHub release builds the plugin with Macro Deck's official workflow, runs the tests and
+# the conformance suite, and uploads the build to the Creator Portal. No secrets: the workflow signs in
+# with the token GitHub issues for the run.
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    uses: Macro-Deck-App/GitHub-Actions/.github/workflows/publish-plugin.yml@v1
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      version: ${{ github.event.release.tag_name }}
+      source: src/PowerToysController
+      changelog: ${{ github.event.release.body }}
+      # The workflow defaults to an older CLI; the Platform refuses builds older than its minimum.
+      cli-version: 3.0.0-beta.17
