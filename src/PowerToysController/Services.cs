@@ -22,12 +22,13 @@ internal static class Services
 		{
 			var logger = sp.GetRequiredService<ILogger>();
 			var files = new DiskFileStore();
-			var processes = new WindowsPowerToysProcesses();
+			var table = new WindowsProcessTable();
+			var processes = new WindowsPowerToysProcesses(table);
 			var paths = PowerToysLocator.FindInstalled() ?? new PowerToysPaths("", PowerToysPaths.DefaultDataRoot);
 			var locator = new PowerToysLocator(processes, PowerToysLocator.FindInstalled, path => SafeRead(files, path));
 			var awake = new AwakeControl(files, paths, TimeProvider.System);
 			var theme = new ThemeControl(new EventTrigger(new WindowsNamedEventOpener()), new RegistryThemeReader(), TimeProvider.System);
-			var modules = new ModuleToggle(files, PowerToysLocator.FindInstalled, processes, new WindowsRunnerControl(new WmiProcessStarter()),
+			var modules = new ModuleToggle(files, PowerToysLocator.FindInstalled, processes, new WindowsRunnerControl(new WmiProcessStarter(), table),
 				PowerToysLocator.IsPolicyForced, TimeProvider.System);
 			var fancyZones = new FancyZonesControl(files, paths, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);
 			var state = new StateService(locator, awake, theme, modules, logger, fancyZones.MonitorsAsync);

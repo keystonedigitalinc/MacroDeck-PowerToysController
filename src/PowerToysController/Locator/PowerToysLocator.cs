@@ -61,25 +61,16 @@ internal sealed class PowerToysLocator(IPowerToysProcesses processes, Func<Power
 	}
 }
 
-internal sealed partial class WindowsPowerToysProcesses : IPowerToysProcesses
+/// <summary>PowerToys runners in this user's session only: another signed-in user's PowerToys is not ours.</summary>
+internal sealed partial class WindowsPowerToysProcesses(KeystoneDigital.PowerToysController.Modules.IProcessTable table) : IPowerToysProcesses
 {
 	private const uint TokenQuery = 0x0008;
 	private const int TokenElevation = 20;
 
 	public bool IsRunnerRunning() => RunnerProcessIds().Count > 0;
 
-	public IReadOnlyList<int> RunnerProcessIds()
-	{
-		var processes = Process.GetProcessesByName("PowerToys");
-		try
-		{
-			return [.. processes.Select(process => process.Id)];
-		}
-		finally
-		{
-			foreach (var process in processes) process.Dispose();
-		}
-	}
+	public IReadOnlyList<int> RunnerProcessIds() =>
+		[.. table.List().Where(p => p.Name == "PowerToys" && p.Session == table.CurrentSession).Select(p => p.Pid)];
 
 	public bool IsRunnerElevated()
 	{

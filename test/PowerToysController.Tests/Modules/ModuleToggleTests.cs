@@ -19,12 +19,15 @@ internal sealed class FakeRunner : IRunnerControl, IPowerToysProcesses
 
 	public Action? OnStop { get; set; }
 
-	public async Task StopAsync(CancellationToken ct)
+	public bool StopSucceeds { get; set; } = true;
+
+	public async Task<bool> StopAsync(CancellationToken ct)
 	{
 		await Task.Delay(5, ct);
 		Stops++;
-		Running = false;
+		if (StopSucceeds) Running = false;
 		OnStop?.Invoke();
+		return StopSucceeds;
 	}
 
 	public bool Start(string runnerExe)
