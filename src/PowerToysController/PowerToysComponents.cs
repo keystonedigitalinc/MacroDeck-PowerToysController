@@ -1,5 +1,6 @@
 using KeystoneDigital.PowerToysController.Awake;
 using KeystoneDigital.PowerToysController.Events;
+using KeystoneDigital.PowerToysController.FancyZones;
 using KeystoneDigital.PowerToysController.Locator;
 using KeystoneDigital.PowerToysController.Modules;
 using KeystoneDigital.PowerToysController.State;
@@ -14,4 +15,5 @@ internal sealed record PowerToysComponents(
 	EventTrigger Trigger,
 	AwakeControl Awake,
 	ThemeControl Theme,
-	ModuleToggle Modules);
+	ModuleToggle Modules,
+	FancyZonesControl FancyZones);

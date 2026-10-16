@@ -160,4 +160,31 @@
   <data name="Errors.Restarting" xml:space="preserve">
     <value>PowerToys is restarting; try again in a few seconds.</value>
   </data>
+  <data name="Actions.ApplyLayout.Name" xml:space="preserve">
+    <value>Apply FancyZones layout</value>
+  </data>
+  <data name="Actions.ApplyLayout.Description" xml:space="preserve">
+    <value>Applies a FancyZones layout to one monitor or to all monitors.</value>
+  </data>
+  <data name="Actions.ApplyLayout.Layout.Label" xml:space="preserve">
+    <value>Layout</value>
+  </data>
+  <data name="Actions.ApplyLayout.Monitor.Label" xml:space="preserve">
+    <value>Monitor</value>
+  </data>
+  <data name="Actions.ApplyLayout.AllMonitors" xml:space="preserve">
+    <value>All monitors</value>
+  </data>
+  <data name="Actions.ApplyLayout.MonitorMissing" xml:space="preserve">
+    <value>{monitor} (not connected)</value>
+  </data>
+  <data name="Actions.OpenZoneEditor.Name" xml:space="preserve">
+    <value>Open FancyZones editor</value>
+  </data>
+  <data name="Actions.OpenZoneEditor.Description" xml:space="preserve">
+    <value>Opens the FancyZones layout editor.</value>
+  </data>
+  <data name="Errors.CliFailed" xml:space="preserve">
+    <value>FancyZones could not apply the layout: {detail}</value>
+  </data>
 </root>

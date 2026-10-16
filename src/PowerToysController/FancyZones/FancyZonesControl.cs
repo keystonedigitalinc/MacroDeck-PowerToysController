@@ -1,0 +1,106 @@
+using System.Globalization;
+using KeystoneDigital.PowerToysController.IO;
+using KeystoneDigital.PowerToysController.Locator;
+using KeystoneDigital.PowerToysController.Processes;
+using KeystoneDigital.PowerToysController.State;
+
+namespace KeystoneDigital.PowerToysController.FancyZones;
+
+internal enum LayoutOutcome
+{
+	Applied,
+	NotFound,
+	NotRunning,
+	CliFailed,
+	Timeout,
+}
+
+/// <summary>
+/// Reads monitors and layouts from FancyZones' files and applies a layout through FancyZonesCLI, which
+/// merges applied-layouts.json and broadcasts the reload message the way FancyZones' editor does.
+/// </summary>
+internal sealed class FancyZonesControl(
+	IFileStore files,
+	PowerToysPaths paths,
+	IProcessRunner runner,
+	IFancyZonesSignals signals,
+	TimeProvider time,
+	TimeSpan? saveWait = null,
+	TimeSpan? confirmWindow = null) : IDisposable
+{
+	private static readonly TimeSpan CliTimeout = TimeSpan.FromSeconds(10);
+	private static readonly TimeSpan Poll = TimeSpan.FromMilliseconds(100);
+
+	private readonly TimeSpan _saveWait = saveWait ?? TimeSpan.FromMilliseconds(300);
+	private readonly TimeSpan _confirmWindow = confirmWindow ?? TimeSpan.FromSeconds(2);
+	private readonly SemaphoreSlim _gate = new(1, 1);
+
+	public string? LastCliOutput { get; private set; }
+
+	public IReadOnlyList<LayoutInfo> Layouts() =>
+		FancyZonesData.Layouts(Read("custom-layouts.json"), Read("layout-templates.json"));
+
+	/// <summary>Asks FancyZones to re-save its monitor list first, so a monitor plugged in since is included.</summary>
+	public async Task<IReadOnlyList<MonitorLayout>> MonitorsAsync(CancellationToken ct)
+	{
+		signals.RequestEditorParametersSave();
+		if (_saveWait > TimeSpan.Zero) await Task.Delay(_saveWait, ct).ConfigureAwait(false);
+
+		return CurrentMonitors();
+	}
+
+	/// <summary>Applies <paramref name="layoutId"/> to the monitor with <paramref name="monitorKey"/>, or to all monitors when null.</summary>
+	public async Task<LayoutOutcome> ApplyAsync(string layoutId, string? monitorKey, CancellationToken ct)
+	{
+		await _gate.WaitAsync(ct).ConfigureAwait(false);
+
+		try
+		{
+			if (!Layouts().Any(l => string.Equals(l.Id, layoutId, StringComparison.OrdinalIgnoreCase))) return LayoutOutcome.NotFound;
+
+			var monitors = await MonitorsAsync(ct).ConfigureAwait(false);
+			var targets = monitorKey is null ? monitors : monitors.Where(m => m.Key == monitorKey).ToList();
+			if (targets.Count == 0) return LayoutOutcome.NotFound;
+
+			var scope = monitorKey is null ? "--all" : "--monitor " + targets[0].Index.ToString(CultureInfo.InvariantCulture);
+			var (exit, output) = await runner.RunAsync(paths.FancyZonesCli, $"set-layout {layoutId} {scope}", CliTimeout, ct).ConfigureAwait(false);
+			LastCliOutput = output;
+			if (exit != 0) return LayoutOutcome.CliFailed;
+
+			var keys = targets.Select(t => t.Key).ToHashSet();
+			var deadline = time.GetUtcNow() + _confirmWindow;
+			while (true)
+			{
+				var now = CurrentMonitors().Where(m => keys.Contains(m.Key)).ToList();
+				if (now.Count == keys.Count && now.All(m => string.Equals(m.ActiveLayoutId, layoutId, StringComparison.OrdinalIgnoreCase)))
+				{
+					return LayoutOutcome.Applied;
+				}
+
+				if (time.GetUtcNow() >= deadline) return LayoutOutcome.Timeout;
+				await Task.Delay(Poll, ct).ConfigureAwait(false);
+			}
+		}
+		finally
+		{
+			_gate.Release();
+		}
+	}
+
+	public void Dispose() => _gate.Dispose();
+
+	private IReadOnlyList<MonitorLayout> CurrentMonitors() =>
+		FancyZonesData.Monitors(Read("editor-parameters.json"), Read("applied-layouts.json"), Layouts());
+
+	private string? Read(string name)
+	{
+		try
+		{
+			return files.Read(Path.Combine(paths.FancyZonesDir, name));
+		}
+		catch (IOException)
+		{
+			return null;
+		}
+	}
+}

@@ -1,5 +1,7 @@
 using KeystoneDigital.PowerToysController.Awake;
 using KeystoneDigital.PowerToysController.Events;
+using KeystoneDigital.PowerToysController.FancyZones;
+using KeystoneDigital.PowerToysController.Tests.FancyZones;
 using KeystoneDigital.PowerToysController.Locator;
 using KeystoneDigital.PowerToysController.Modules;
 using KeystoneDigital.PowerToysController.State;
@@ -21,19 +23,24 @@ internal sealed class TestRig
 	{
 		Files.Files[Paths.GeneralSettings] = Fixture.Text("general-settings.json");
 		Files.Files[Paths.AwakeSettings] = Fixture.Text("awake-settings.json");
+		FancyZonesTests.Seed(Files);
+		Cli = new FakeCli(Files, Paths);
 		Func<PowerToysPaths?> find = () => installed ? Paths : null;
 		var locator = new PowerToysLocator(Runner, find, Files.Read);
 		var trigger = new EventTrigger(Events);
 		var awake = new AwakeControl(Files, Paths, TimeProvider.System);
 		var theme = new ThemeControl(new EventTrigger(Theme), Theme, TimeProvider.System, TimeSpan.FromMilliseconds(300));
 		var modules = new ModuleToggle(Files, find, Runner, Runner, _ => false, TimeProvider.System, TimeSpan.FromMilliseconds(300));
-		var state = new StateService(locator, awake, theme, modules, Serilog.Core.Logger.None);
-		Components = new PowerToysComponents(locator, state, trigger, awake, theme, modules);
+		var fancyZones = new FancyZonesControl(Files, Paths, Cli, new FakeSignals(), TimeProvider.System, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
+		var state = new StateService(locator, awake, theme, modules, Serilog.Core.Logger.None, fancyZones.MonitorsAsync);
+		Components = new PowerToysComponents(locator, state, trigger, awake, theme, modules, fancyZones);
 	}
 
 	public FakeFileStore Files { get; } = new();
 
 	public FakeRunner Runner { get; } = new();
+
+	public FakeCli Cli { get; }
 
 	public FakeEventOpener Events { get; } = new();
 

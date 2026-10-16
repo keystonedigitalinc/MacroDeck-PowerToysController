@@ -18,6 +18,8 @@ public sealed class PowerToysIntegration : IPluginIntegration, IVariableProvider
 			new AwakeAction(components, TimeProvider.System),
 			new ThemeAction(components),
 			new ModuleAction(components),
+			new ApplyLayoutAction(components),
+			new OpenZoneEditorAction(components),
 		];
 	}
 

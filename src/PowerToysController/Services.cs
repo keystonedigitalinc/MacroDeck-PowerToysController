@@ -1,5 +1,6 @@
 using KeystoneDigital.PowerToysController.Awake;
 using KeystoneDigital.PowerToysController.Events;
+using KeystoneDigital.PowerToysController.FancyZones;
 using KeystoneDigital.PowerToysController.IO;
 using KeystoneDigital.PowerToysController.Locator;
 using KeystoneDigital.PowerToysController.Modules;
@@ -27,8 +28,9 @@ internal static class Services
 			var theme = new ThemeControl(new EventTrigger(new WindowsNamedEventOpener()), new RegistryThemeReader(), TimeProvider.System);
 			var modules = new ModuleToggle(files, PowerToysLocator.FindInstalled, processes, new WindowsRunnerControl(new WmiProcessStarter()),
 				PowerToysLocator.IsPolicyForced, TimeProvider.System);
-			var state = new StateService(locator, awake, theme, modules, logger);
-			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules);
+			var fancyZones = new FancyZonesControl(files, paths, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);
+			var state = new StateService(locator, awake, theme, modules, logger, fancyZones.MonitorsAsync);
+			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules, fancyZones);
 		});
 		services.AddHostedService(sp => sp.GetRequiredService<PowerToysComponents>().State);
 		return services;
