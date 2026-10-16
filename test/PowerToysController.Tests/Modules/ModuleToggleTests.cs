@@ -21,6 +21,10 @@ internal sealed class FakeRunner : IRunnerControl, IPowerToysProcesses
 
 	public bool StopSucceeds { get; set; } = true;
 
+	public bool KeepOldPid { get; set; }
+
+	private int _pid = 1234;
+
 	public async Task<bool> StopAsync(CancellationToken ct)
 	{
 		await Task.Delay(5, ct);
@@ -33,7 +37,11 @@ internal sealed class FakeRunner : IRunnerControl, IPowerToysProcesses
 	public bool Start(string runnerExe)
 	{
 		Starts++;
-		if (!StartFails) Running = true;
+		if (!StartFails)
+		{
+			Running = true;
+			if (!KeepOldPid) _pid++;
+		}
 		return !StartFails;
 	}
 
@@ -43,7 +51,7 @@ internal sealed class FakeRunner : IRunnerControl, IPowerToysProcesses
 
 	public bool IsRunnerElevated() => Running && Elevated;
 
-	public IReadOnlyList<int> RunnerProcessIds() => Running ? [1234] : [];
+	public IReadOnlyList<int> RunnerProcessIds() => Running ? [_pid] : [];
 }
 
 [TestFixture]
@@ -127,10 +135,76 @@ public sealed class ModuleToggleTests
 	}
 
 	[Test]
-	public async Task Runner_not_back_in_time_is_Timeout()
+	public async Task A_runner_that_will_not_stop_is_NotStopped_and_nothing_is_written()
+	{
+		var (toggle, runner, store) = Create();
+		runner.StopSucceeds = false;
+
+		Assert.That(await toggle.SetAsync("ColorPicker", "off", default), Is.EqualTo(ModuleOutcome.NotStopped));
+		Assert.That(store.Writes, Is.Zero);
+		Assert.That(Enabled(store, "ColorPicker"), Is.True);
+	}
+
+	[Test]
+	public async Task A_failed_write_still_restarts_PowerToys()
+	{
+		var (toggle, runner, store) = Create();
+		store.WriteError = new IOException("locked");
+
+		var outcome = await toggle.SetAsync("ColorPicker", "off", default);
+
+		Assert.That(outcome, Is.EqualTo(ModuleOutcome.Failed));
+		Assert.That(runner.Starts, Is.EqualTo(1));
+		Assert.That(runner.Running, Is.True);
+	}
+
+	[Test]
+	public async Task A_half_written_settings_file_after_stop_is_repaired_from_the_earlier_read()
+	{
+		var (toggle, runner, store) = Create();
+		runner.OnStop = () => store.Files[Paths.GeneralSettings] = """{"enabled":{"Color""";
+
+		var outcome = await toggle.SetAsync("ColorPicker", "off", default);
+
+		Assert.That(outcome, Is.EqualTo(ModuleOutcome.Applied));
+		Assert.That(Enabled(store, "ColorPicker"), Is.False);
+		Assert.That(EnableMap.Read(store.Files[Paths.GeneralSettings]), Has.Count.EqualTo(35));
+	}
+
+	[Test]
+	public async Task A_start_that_fails_twice_is_StartFailed()
 	{
 		var (toggle, runner, _) = Create();
 		runner.StartFails = true;
+
+		Assert.That(await toggle.SetAsync("ColorPicker", "off", default), Is.EqualTo(ModuleOutcome.StartFailed));
+		Assert.That(runner.Starts, Is.EqualTo(2));
+	}
+
+	[Test]
+	public async Task Cancelling_after_stop_still_restarts_PowerToys()
+	{
+		var (toggle, runner, _) = Create();
+		using var cts = new CancellationTokenSource();
+		runner.OnStop = cts.Cancel;
+
+		try
+		{
+			await toggle.SetAsync("ColorPicker", "off", cts.Token);
+		}
+		catch (OperationCanceledException)
+		{
+		}
+
+		Assert.That(runner.Starts, Is.EqualTo(1));
+		Assert.That(runner.Running, Is.True);
+	}
+
+	[Test]
+	public async Task Only_a_new_runner_counts_as_back()
+	{
+		var (toggle, runner, _) = Create();
+		runner.KeepOldPid = true;
 
 		Assert.That(await toggle.SetAsync("ColorPicker", "off", default), Is.EqualTo(ModuleOutcome.Timeout));
 	}

@@ -21,8 +21,11 @@ internal sealed class FakeFileStore : IFileStore
 		return Files.TryGetValue(path, out var text) ? text : null;
 	}
 
+	public Exception? WriteError { get; set; }
+
 	public void Write(string path, string content)
 	{
+		if (WriteError is not null) throw WriteError;
 		Writes++;
 		Files[path] = content;
 	}

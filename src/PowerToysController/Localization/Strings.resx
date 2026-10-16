@@ -199,4 +199,13 @@
   <data name="Actions.LaunchWorkspace.NoneSaved" xml:space="preserve">
     <value>No Workspaces saved yet. Create one in PowerToys Workspaces first.</value>
   </data>
+  <data name="Errors.NotStopped" xml:space="preserve">
+    <value>PowerToys did not close, so the change was not made.</value>
+  </data>
+  <data name="Errors.StartFailed" xml:space="preserve">
+    <value>PowerToys could not be started again. Start it from the Start menu.</value>
+  </data>
+  <data name="Errors.SettingsUnwritable" xml:space="preserve">
+    <value>PowerToys' settings could not be read or written.</value>
+  </data>
 </root>

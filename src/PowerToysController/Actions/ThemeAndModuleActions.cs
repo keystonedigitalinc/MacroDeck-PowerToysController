@@ -118,6 +118,9 @@ internal sealed class ModuleAction(PowerToysComponents components) : IDynamicOpt
 				ModuleOutcome.NotFound => ActionResult.Failed(ActionErrorCodes.NotFound, Strings.Errors.NotFound()),
 				ModuleOutcome.PolicyForced => ActionResult.Failed(ActionErrorCodes.ProviderRejected, Strings.Errors.PolicyForced(module)),
 				ModuleOutcome.NotInstalled => ActionResult.Failed(ActionErrorCodes.NotConfigured, Strings.Errors.NotInstalled()),
+				ModuleOutcome.NotStopped => ActionResult.Failed(ActionErrorCodes.ProviderError, Strings.Errors.NotStopped()),
+				ModuleOutcome.StartFailed => ActionResult.Failed(ActionErrorCodes.ProviderError, Strings.Errors.StartFailed()),
+				ModuleOutcome.Failed => ActionResult.Failed(ActionErrorCodes.ProviderError, Strings.Errors.SettingsUnwritable()),
 				_ => Results.NotApplied(),
 			};
 		}
