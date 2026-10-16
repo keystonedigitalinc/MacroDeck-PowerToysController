@@ -19,4 +19,145 @@
   <data name="Integration.Name" xml:space="preserve">
     <value>PowerToys Control (unofficial)</value>
   </data>
+  <data name="Actions.LaunchTool.Name" xml:space="preserve">
+    <value>Launch PowerToys tool</value>
+  </data>
+  <data name="Actions.LaunchTool.Description" xml:space="preserve">
+    <value>Opens a PowerToys tool without its keyboard shortcut. Always On Top and Crop And Lock act on the window that has focus.</value>
+  </data>
+  <data name="Actions.LaunchTool.Tool.Label" xml:space="preserve">
+    <value>Tool</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.ColorPicker" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.TextExtractor" xml:space="preserve">
+    <value>Text Extractor</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.ScreenRuler" xml:space="preserve">
+    <value>Screen Ruler</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.ShortcutGuide" xml:space="preserve">
+    <value>Shortcut Guide</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.AlwaysOnTop" xml:space="preserve">
+    <value>Always On Top (pin focused window)</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.CommandPalette" xml:space="preserve">
+    <value>Command Palette</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.CropAndLockReparent" xml:space="preserve">
+    <value>Crop And Lock: reparent</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.CropAndLockThumbnail" xml:space="preserve">
+    <value>Crop And Lock: thumbnail</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.CropAndLockScreenshot" xml:space="preserve">
+    <value>Crop And Lock: screenshot</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.FindMyMouse" xml:space="preserve">
+    <value>Find My Mouse</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.MouseHighlighter" xml:space="preserve">
+    <value>Mouse Highlighter</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.MouseCrosshairs" xml:space="preserve">
+    <value>Mouse Crosshairs</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.MouseJump" xml:space="preserve">
+    <value>Mouse Jump</value>
+  </data>
+  <data name="Actions.Awake.Name" xml:space="preserve">
+    <value>Awake</value>
+  </data>
+  <data name="Actions.Awake.Description" xml:space="preserve">
+    <value>Keeps the PC awake with PowerToys Awake: off, indefinitely, for a number of minutes, or until a time.</value>
+  </data>
+  <data name="Actions.Awake.Mode.Label" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="Actions.Awake.Mode.Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Actions.Awake.Mode.Indefinite" xml:space="preserve">
+    <value>Keep awake indefinitely</value>
+  </data>
+  <data name="Actions.Awake.Mode.Timed" xml:space="preserve">
+    <value>Keep awake for a while</value>
+  </data>
+  <data name="Actions.Awake.Mode.Until" xml:space="preserve">
+    <value>Keep awake until a time</value>
+  </data>
+  <data name="Actions.Awake.Minutes.Label" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
+  <data name="Actions.Awake.Until.Label" xml:space="preserve">
+    <value>Until (HH:mm)</value>
+  </data>
+  <data name="Actions.Awake.DisplayOn.Label" xml:space="preserve">
+    <value>Keep the screen on</value>
+  </data>
+  <data name="Actions.Theme.Name" xml:space="preserve">
+    <value>Windows theme</value>
+  </data>
+  <data name="Actions.Theme.Description" xml:space="preserve">
+    <value>Switches between light and dark theme with PowerToys Light Switch.</value>
+  </data>
+  <data name="Actions.Theme.Mode.Label" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Actions.Theme.Mode.Toggle" xml:space="preserve">
+    <value>Toggle</value>
+  </data>
+  <data name="Actions.Theme.Mode.Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Actions.Theme.Mode.Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Actions.Module.Name" xml:space="preserve">
+    <value>PowerToys module on/off</value>
+  </data>
+  <data name="Actions.Module.Description" xml:space="preserve">
+    <value>Turns a PowerToys module on or off. PowerToys restarts to apply it, which closes its open windows for a few seconds.</value>
+  </data>
+  <data name="Actions.Module.Target.Label" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="Actions.Module.State.Label" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Actions.Module.State.On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Actions.Module.State.Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Actions.Module.State.Toggle" xml:space="preserve">
+    <value>Toggle</value>
+  </data>
+  <data name="Errors.NotInstalled" xml:space="preserve">
+    <value>PowerToys is not installed.</value>
+  </data>
+  <data name="Errors.NotRunning" xml:space="preserve">
+    <value>PowerToys isn't running.</value>
+  </data>
+  <data name="Errors.Elevated" xml:space="preserve">
+    <value>PowerToys runs as administrator; Macro Deck can't reach it.</value>
+  </data>
+  <data name="Errors.ModuleOff" xml:space="preserve">
+    <value>{tool} is turned off in PowerToys.</value>
+  </data>
+  <data name="Errors.NotApplied" xml:space="preserve">
+    <value>PowerToys did not apply the change.</value>
+  </data>
+  <data name="Errors.PolicyForced" xml:space="preserve">
+    <value>{module} is set by a Windows policy.</value>
+  </data>
+  <data name="Errors.NotFound" xml:space="preserve">
+    <value>That item no longer exists in PowerToys.</value>
+  </data>
+  <data name="Errors.Restarting" xml:space="preserve">
+    <value>PowerToys is restarting; try again in a few seconds.</value>
+  </data>
 </root>

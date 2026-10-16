@@ -1,3 +1,4 @@
+using KeystoneDigital.PowerToysController.Actions;
 using KeystoneDigital.PowerToysController.Variables;
 using MacroDeck.Sdk;
 using MacroDeck.Sdk.Actions;
@@ -11,7 +12,13 @@ public sealed class PowerToysIntegration : IPluginIntegration, IVariableProvider
 	internal PowerToysIntegration(PowerToysComponents components)
 	{
 		Components = components;
-		Actions = [];
+		Actions =
+		[
+			new LaunchToolAction(components),
+			new AwakeAction(components, TimeProvider.System),
+			new ThemeAction(components),
+			new ModuleAction(components),
+		];
 	}
 
 	public IReadOnlyList<IActionDefinition> Actions { get; }

@@ -46,6 +46,25 @@ internal static class PowerToysEvents
 		_ => throw new ArgumentOutOfRangeException(nameof(tool)),
 	};
 
+	/// <summary>PowerToys' own product name for the tool, used as content inside messages.</summary>
+	public static string ProductName(PowerToysTool tool) => tool switch
+	{
+		PowerToysTool.ColorPicker => "Color Picker",
+		PowerToysTool.TextExtractor => "Text Extractor",
+		PowerToysTool.ScreenRuler => "Screen Ruler",
+		PowerToysTool.ShortcutGuide => "Shortcut Guide",
+		PowerToysTool.AlwaysOnTop => "Always On Top",
+		PowerToysTool.CommandPalette => "Command Palette",
+		PowerToysTool.CropAndLockReparent or PowerToysTool.CropAndLockThumbnail or PowerToysTool.CropAndLockScreenshot => "Crop And Lock",
+		PowerToysTool.FindMyMouse => "Find My Mouse",
+		PowerToysTool.MouseHighlighter => "Mouse Highlighter",
+		PowerToysTool.MouseCrosshairs => "Mouse Crosshairs",
+		PowerToysTool.MouseJump => "Mouse Jump",
+		PowerToysTool.LightSwitchToggle => "Light Switch",
+		PowerToysTool.FancyZonesEditor => "FancyZones",
+		_ => throw new ArgumentOutOfRangeException(nameof(tool)),
+	};
+
 	public static string ModuleOf(PowerToysTool tool) => tool switch
 	{
 		PowerToysTool.ColorPicker => "ColorPicker",
