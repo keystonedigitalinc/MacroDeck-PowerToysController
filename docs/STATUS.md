@@ -20,7 +20,7 @@ Last updated 2026-10-16. Read this first when picking the project back up.
 
 - **Never run `macrodeck-plugin test` locally.** It executes the plugin's real actions on this PC. On 2026-10-16 it fired tools unannounced and set monitor 2 (AOC2402) to the layout "1 - Primary". Conformance runs in CI only. Locally use `macrodeck-plugin build` and `validate --level Publication`.
 - Live tests only with the user watching, one step at a time, and announce each one.
-- Monitor 2 is still on "1 - Primary". Its original layout was "Stacked" (`{7972E5A3-E9A8-4A13-8B77-602EFBB52ED4}`). Ask the user before restoring it.
+- Monitor 2 is back on its original layout "Stacked" (`{7972E5A3-E9A8-4A13-8B77-602EFBB52ED4}`) after the 2026-10-17 cycle test. The user renamed "1 - Primary" to "Tall" in the editor.
 - Don't touch the user's Default profile in Macro Deck; make a separate showcase profile for screenshots.
 
 ## Before the Store
