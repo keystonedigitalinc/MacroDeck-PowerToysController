@@ -164,7 +164,19 @@
     <value>Apply FancyZones layout</value>
   </data>
   <data name="Actions.ApplyLayout.Description" xml:space="preserve">
-    <value>Applies a FancyZones layout to one monitor or to all monitors.</value>
+    <value>Applies a FancyZones layout, or cycles through chosen layouts, on one monitor or on all monitors.</value>
+  </data>
+  <data name="Actions.ApplyLayout.Mode.Label" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="Actions.ApplyLayout.Mode.Layout" xml:space="preserve">
+    <value>Apply one layout</value>
+  </data>
+  <data name="Actions.ApplyLayout.Mode.Cycle" xml:space="preserve">
+    <value>Cycle through layouts</value>
+  </data>
+  <data name="Actions.ApplyLayout.Layouts.Label" xml:space="preserve">
+    <value>Layouts to cycle through</value>
   </data>
   <data name="Actions.ApplyLayout.Layout.Label" xml:space="preserve">
     <value>Layout</value>

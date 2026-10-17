@@ -85,6 +85,20 @@ internal static class FancyZonesData
 		return candidates.Count == 1 ? candidates[0] : null;
 	}
 
+	/// <summary>
+	/// The layout after <paramref name="activeId"/> in <paramref name="cycle"/>, wrapping round. Ticked layouts
+	/// that FancyZones no longer has are skipped; an active layout outside the list starts at the first.
+	/// Null when none of the ticked layouts exists.
+	/// </summary>
+	public static string? Next(IReadOnlyList<string> cycle, IReadOnlyList<LayoutInfo> layouts, string? activeId)
+	{
+		var available = cycle.Where(id => layouts.Any(l => string.Equals(l.Id, id, StringComparison.OrdinalIgnoreCase))).ToList();
+		if (available.Count == 0) return null;
+
+		var position = available.FindIndex(id => string.Equals(id, activeId, StringComparison.OrdinalIgnoreCase));
+		return available[(position + 1) % available.Count];
+	}
+
 	private static string TemplateName(string type) => type switch
 	{
 		"focus" => "Focus",

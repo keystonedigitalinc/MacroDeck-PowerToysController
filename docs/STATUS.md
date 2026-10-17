@@ -13,6 +13,7 @@ Last updated 2026-10-16. Read this first when picking the project back up.
 
 - Worked: Color Picker, Text Extractor, Screen Ruler, Shortcut Guide, Always On Top, Command Palette, Mouse Highlighter, FancyZones editor; module toggle (Awake on/off with PowerToys restart); layout apply/restore on monitor 2.
 - Fixed during the session: Awake ignored the plugin's writes (temp-file swap is invisible to its watcher, now written in place); the Awake action succeeded while the Awake module was off (now Unavailable).
+- Added 2026-10-17: cycle mode on "Apply FancyZones layout" (ticked list, wraps, skips deleted layouts; all monitors follows monitor 1). Live tested in Macro Deck 2026-10-17 on monitor 2 (8 presses, Tall -> Short -> Stacked, wraps). An earlier install showed no reaction to presses; reinstalling the same code fixed it, root cause not found.
 - Not tested: theme toggle (needs Light Switch enabled), Workspaces (module off, none saved), and the plugin inside Macro Deck itself.
 
 ## Warnings for future sessions

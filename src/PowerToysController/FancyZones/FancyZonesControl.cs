@@ -51,20 +51,33 @@ internal sealed class FancyZonesControl(
 	}
 
 	/// <summary>Applies <paramref name="layoutId"/> to the monitor with <paramref name="monitorKey"/>, or to all monitors when null.</summary>
-	public async Task<LayoutOutcome> ApplyAsync(string layoutId, string? monitorKey, CancellationToken ct)
+	public Task<LayoutOutcome> ApplyAsync(string layoutId, string? monitorKey, CancellationToken ct) =>
+		ApplyAsync(_ => layoutId, monitorKey, ct);
+
+	/// <summary>
+	/// Applies the layout after the target monitor's active one in <paramref name="cycle"/>. With all monitors
+	/// the first monitor's active layout decides, and the result goes to every monitor.
+	/// </summary>
+	public Task<LayoutOutcome> CycleAsync(IReadOnlyList<string> cycle, string? monitorKey, CancellationToken ct) =>
+		ApplyAsync(targets => FancyZonesData.Next(cycle, Layouts(), targets[0].ActiveLayoutId), monitorKey, ct);
+
+	// The layout is chosen once the target monitors are known, so a cycle reads their state under the gate.
+	private async Task<LayoutOutcome> ApplyAsync(Func<IReadOnlyList<MonitorLayout>, string?> chooseLayout, string? monitorKey, CancellationToken ct)
 	{
 		await _gate.WaitAsync(ct).ConfigureAwait(false);
 
 		try
 		{
 			if (paths() is not { } location) return LayoutOutcome.NotInstalled;
-			if (!Layouts().Any(l => string.Equals(l.Id, layoutId, StringComparison.OrdinalIgnoreCase))) return LayoutOutcome.NotFound;
 
 			var monitors = await MonitorsAsync(ct).ConfigureAwait(false);
 			var target = monitorKey is null ? null : FancyZonesData.Resolve(monitors, monitorKey);
 			if (monitorKey is not null && target is null) return LayoutOutcome.NotFound;
 			var targets = target is null ? monitors : [target];
 			if (targets.Count == 0) return LayoutOutcome.NotFound;
+
+			if (chooseLayout(targets) is not { } layoutId) return LayoutOutcome.NotFound;
+			if (!Layouts().Any(l => string.Equals(l.Id, layoutId, StringComparison.OrdinalIgnoreCase))) return LayoutOutcome.NotFound;
 
 			var scope = monitorKey is null ? "--all" : "--monitor " + targets[0].Index.ToString(CultureInfo.InvariantCulture);
 			var (exit, output) = await runner.RunAsync(location.FancyZonesCli, $"set-layout {layoutId} {scope}", CliTimeout, ct).ConfigureAwait(false);

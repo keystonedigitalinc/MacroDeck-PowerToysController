@@ -12,7 +12,7 @@ Tested with PowerToys 0.101 on Windows 10 22H2.
 | Awake | Off, keep awake indefinitely, for N minutes, or until a time. Optionally keeps the screen on. |
 | Windows theme | Toggle, dark or light, through Light Switch |
 | PowerToys module on/off | Turns a module on, off or toggles it. **PowerToys restarts to apply it**, which closes its open windows for a few seconds. If PowerToys isn't running, the change is saved and applies when it next starts. |
-| Apply FancyZones layout | Any custom layout or template, on one monitor or on all monitors |
+| Apply FancyZones layout | Any custom layout or template, on one monitor or on all monitors. Cycle mode steps through the layouts you tick, one per press |
 | Open FancyZones editor | Opens the layout editor |
 | Launch PowerToys Workspace | Opens a saved Workspace |
 
