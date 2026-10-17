@@ -23,7 +23,7 @@ Checked against Creator Guidelines **version 6** and the SDK policy on 2026-10-1
 | Store release workflow | Done: `.github/workflows/release.yml`, `cli-version: 3.0.0-beta.17`, no `build-per-platform` |
 | Publication validation | Done: 0 errors, 0 warnings (`macrodeck-plugin validate --artifact ... --level Publication`) |
 | Conformance | Done in CI: 33 passed, 0 failed, 16 skipped |
-| Tested by the publisher (section 6) | Partly. Done: all tools, Awake, module toggle, layout apply and cycle, FancyZones editor, inside Macro Deck too. Theme toggle done 2026-10-17. **Not yet: Workspaces (needs a saved Workspace)** |
+| Tested by the publisher (section 6) | Done. Done: all tools, Awake, module toggle, layout apply and cycle, FancyZones editor, inside Macro Deck too. Theme toggle and Workspaces done 2026-10-17. |
 | Icon (section 10) | Done: neon toolbox with a zone grid, colour swatches, gear, magnifier and wrench. No Microsoft or Macro Deck logo. Source in `docs/branding/icon-source.png`; the package ships a 512 px copy |
 | Screenshots of real use (section 10) | To do |
 | Creator Portal project and GitHub connection | To do |

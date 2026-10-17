@@ -1,6 +1,6 @@
 # Status and next steps
 
-Last updated 2026-10-17. Next: live-test theme toggle and Workspaces, then screenshots, then merge PR #1 and follow docs/STORE-SUBMISSION.md. No manifest version bump: the release tag sets it. Read this first when picking the project back up.
+Last updated 2026-10-17. All features live-tested. Next: screenshots, then merge PR #1 and follow docs/STORE-SUBMISSION.md. No manifest version bump: the release tag sets it. Read this first when picking the project back up.
 
 ## Where it stands
 
@@ -15,7 +15,7 @@ Last updated 2026-10-17. Next: live-test theme toggle and Workspaces, then scree
 - Fixed during the session: Awake ignored the plugin's writes (temp-file swap is invisible to its watcher, now written in place); the Awake action succeeded while the Awake module was off (now Unavailable).
 - Added 2026-10-17: cycle mode on "Apply FancyZones layout" (ticked list, wraps, skips deleted layouts; all monitors follows monitor 1). Live tested in Macro Deck 2026-10-17 on monitor 2 (8 presses, Tall -> Short -> Stacked, wraps). An earlier install showed no reaction to presses; reinstalling the same code fixed it, root cause not found.
 - Theme toggle live-tested 2026-10-17 after a fix: Light Switch takes about 10 s per toggle and drops a toggle sent before it has finished, so the plugin now waits for its override event. Light Switch and Workspaces modules are now on.
-- Not tested: Workspaces (none saved yet).
+- Workspaces live-tested 2026-10-17: "Workspace 1" launched through the plugin; the PowerToys launcher started and arranged its apps (its Calculator entry failed inside PowerToys: a TileIconify shortcut path).
 
 ## Warnings for future sessions
 
