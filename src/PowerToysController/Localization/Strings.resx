@@ -119,7 +119,7 @@
     <value>PowerToys module on/off</value>
   </data>
   <data name="Actions.Module.Description" xml:space="preserve">
-    <value>Turns a PowerToys module on or off. PowerToys restarts to apply it, which closes its open windows for a few seconds.</value>
+    <value>Turns a PowerToys module on or off. PowerToys can only change this at startup, so the plugin closes PowerToys, changes the module in PowerToys' settings file and starts PowerToys again. Its open windows close for a few seconds.</value>
   </data>
   <data name="Actions.Module.Target.Label" xml:space="preserve">
     <value>Module</value>

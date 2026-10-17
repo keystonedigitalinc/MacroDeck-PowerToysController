@@ -23,7 +23,9 @@
   "compatibility": {
     "macroDeck": ">=3.0.0-0"
   },
-  "permissions": [],
+  "permissions": [
+    "process:spawn"
+  ],
   "ai": {
     "interaction": false,
     "generatedContent": false,

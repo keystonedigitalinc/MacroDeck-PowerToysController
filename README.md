@@ -25,6 +25,20 @@ The tools are triggered by the same signals PowerToys' own Command Palette and Q
 - **PowerToys running as administrator** cannot be controlled from Macro Deck, because Windows blocks it. `powertoys_status` then reads `elevated`.
 - **Monitors.** A layout button remembers its monitor by name and serial number, not by position, so it keeps targeting the same screen after monitors are renumbered. An unplugged monitor fails with "not found".
 
+## What the plugin changes
+
+The plugin changes nothing until you press a button. It never acts in the background, and it never turns a module on by itself.
+
+- **Awake** writes the mode into Awake's own settings file, `%LOCALAPPDATA%\Microsoft\PowerToys\Awake\settings.json`. Awake picks the change up live.
+- **Module on/off** changes one entry of the `enabled` list in `%LOCALAPPDATA%\Microsoft\PowerToys\settings.json`, the same entry PowerToys Settings changes. PowerToys reads that list only at startup and accepts live changes only from its own Settings app. So the plugin ends the PowerToys processes in your Windows session, writes the entry, and starts PowerToys again. Apps that you opened from PowerToys keep running. If PowerToys wasn't running, the plugin only writes the entry.
+- **FancyZones layouts** are applied with `FancyZonesCLI.exe`, which ships with PowerToys.
+- **Workspaces** are opened with PowerToys' own `PowerToys.WorkspacesLauncher.exe`.
+- **Tools, the theme and the FancyZones editor** are opened with the same signals PowerToys' Command Palette and Quick Access send.
+
+PowerToys and the Workspaces launcher are started through Windows Management Instrumentation (`Win32_Process.Create`), not as children of the plugin. Macro Deck ends a plugin's child processes when it restarts or updates the plugin, and this would otherwise close PowerToys or your Workspace apps too.
+
+The plugin sends nothing over the network.
+
 ## Variables
 
 | Variable | Value |

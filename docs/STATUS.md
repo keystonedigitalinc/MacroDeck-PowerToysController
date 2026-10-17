@@ -1,6 +1,6 @@
 # Status and next steps
 
-Last updated 2026-10-17. Next: bump to 1.0.0, then showcase profile and screenshots. Read this first when picking the project back up.
+Last updated 2026-10-17. Next: live-test theme toggle and Workspaces, then screenshots, then merge PR #1 and follow docs/STORE-SUBMISSION.md. No manifest version bump: the release tag sets it. Read this first when picking the project back up.
 
 ## Where it stands
 
@@ -27,6 +27,6 @@ Last updated 2026-10-17. Next: bump to 1.0.0, then showcase profile and screensh
 
 1. User installs the package in Macro Deck 3 and tests real buttons (Color Picker, a layout, Awake with the module enabled).
 2. Real icon: done 2026-10-17 (neon toolbox, 512x512).
-3. Bump `manifest.json` version 0.1.0 to 1.0.0.
+3. No version bump: release tag `v1.0.0` sets the version (Razer lesson).
 4. Showcase profile and screenshots.
 5. Merge PR #1, create the Creator Portal project, connect GitHub, release v1.0.0. Follow `docs/STORE-SUBMISSION.md` and the Razer project's lessons (CLI 3.0.0-beta.17, no `build-per-platform`).
