@@ -1,6 +1,6 @@
-# PowerToys Control (unofficial)
+# PowerToys Controller
 
-A Macro Deck 3 plugin that controls Microsoft PowerToys from your deck without relying on its keyboard shortcuts. Not affiliated with or endorsed by Microsoft.
+An unofficial Macro Deck 3 plugin that controls Microsoft PowerToys from your deck without relying on its keyboard shortcuts. Not affiliated with or endorsed by Microsoft.
 
 Tested with PowerToys 0.101 on Windows 10 22H2.
 

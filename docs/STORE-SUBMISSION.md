@@ -8,7 +8,7 @@ Follow the same path the Razer plugin took: `keystonedigitalinc/MacroDeck-RazerC
 | --- | --- |
 | Public repo and MIT licence | Done: https://github.com/keystonedigitalinc/MacroDeck-PowerToysController |
 | SDK at or above the Store minimum | Done: 3.0.0-beta.17 |
-| ID and name | Done: `com.keystonedigital.powertoys`, "PowerToys Control (unofficial)". No Microsoft branding. |
+| ID and name | Done: `com.keystonedigital.powertoys`, "PowerToys Controller"; "unofficial" is in the description. No Microsoft logos. |
 | Publisher | Keystone Digital (existing Portal organization) |
 | AI declaration | `generatedAssets: true`. The icon is AI-generated (neon toolbox, 512x512). |
 | Permissions | None declared |
@@ -21,7 +21,7 @@ Follow the same path the Razer plugin took: `keystonedigitalinc/MacroDeck-RazerC
 
 ## Store description (draft)
 
-> Control Microsoft PowerToys from Macro Deck without its keyboard shortcuts.
+> Unofficial plugin to control Microsoft PowerToys from Macro Deck without its keyboard shortcuts. Not affiliated with or endorsed by Microsoft.
 >
 > - Launch Color Picker, Text Extractor, Screen Ruler, Shortcut Guide, Command Palette, Always On Top, Crop And Lock and the mouse utilities.
 > - Keep the PC awake (indefinitely, for a while, or until a time).
