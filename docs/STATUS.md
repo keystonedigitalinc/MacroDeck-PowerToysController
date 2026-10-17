@@ -26,7 +26,7 @@ Last updated 2026-10-16. Read this first when picking the project back up.
 ## Before the Store
 
 1. User installs the package in Macro Deck 3 and tests real buttons (Color Picker, a layout, Awake with the module enabled).
-2. Real icon: `src/PowerToysController/Assets/icon.png` is still the Razer placeholder. User generates one (prompt given in session: navy background, toolbox/wrench with a 3x3 button grid, no text, no Microsoft logos).
+2. Real icon: done 2026-10-17 (neon toolbox, 512x512).
 3. Bump `manifest.json` version 0.1.0 to 1.0.0.
 4. Showcase profile and screenshots.
 5. Merge PR #1, create the Creator Portal project, connect GitHub, release v1.0.0. Follow `docs/STORE-SUBMISSION.md` and the Razer project's lessons (CLI 3.0.0-beta.17, no `build-per-platform`).

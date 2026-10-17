@@ -10,13 +10,14 @@ Follow the same path the Razer plugin took: `keystonedigitalinc/MacroDeck-RazerC
 | SDK at or above the Store minimum | Done: 3.0.0-beta.17 |
 | ID and name | Done: `com.keystonedigital.powertoys`, "PowerToys Control (unofficial)". No Microsoft branding. |
 | Publisher | Keystone Digital (existing Portal organization) |
-| AI declaration | `generatedAssets: true`. The icon is still a placeholder (the Razer icon), so a real icon is needed. |
+| AI declaration | `generatedAssets: true`. The icon is AI-generated (neon toolbox, 512x512). |
 | Permissions | None declared |
 | Publication validation | 0 errors |
 | Conformance | 33 passed, 0 failed, 16 skipped |
 | Release workflow | `cli-version: 3.0.0-beta.17`, no `build-per-platform` |
 | Live tests by the publisher | Pending: the session with the user |
-| Icon, screenshots, Portal project | To do (the user) |
+| Icon | Done 2026-10-17 |
+| Screenshots, Portal project | To do (the user) |
 
 ## Store description (draft)
 
