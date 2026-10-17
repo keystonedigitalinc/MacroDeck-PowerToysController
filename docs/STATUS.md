@@ -1,6 +1,6 @@
 # Status and next steps
 
-Last updated 2026-10-16. Read this first when picking the project back up.
+Last updated 2026-10-17. Next: bump to 1.0.0, then showcase profile and screenshots. Read this first when picking the project back up.
 
 ## Where it stands
 
