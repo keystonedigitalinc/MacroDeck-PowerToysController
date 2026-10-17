@@ -48,6 +48,10 @@ switch (args)
 		Console.WriteLine($"toggle back: {await pt.Theme.ApplyAsync("toggle", CancellationToken.None)}");
 		return 0;
 
+	case ["--theme", var mode]:
+		Console.WriteLine($"theme {mode}: {await pt.Theme.ApplyAsync(mode, CancellationToken.None)}");
+		return 0;
+
 	case ["--layout-roundtrip", var index] when int.TryParse(index, out var monitorIndex):
 	{
 		var monitor = (await pt.FancyZones.MonitorsAsync(CancellationToken.None)).Single(m => m.Index == monitorIndex);
@@ -72,6 +76,6 @@ switch (args)
 		return 0;
 
 	default:
-		Console.WriteLine("Usage: ManualPowerToysCheck --state | --fire <Tool> | --awake-roundtrip | --theme-roundtrip | --layout-roundtrip <monitor> | --module <Module> <on|off|toggle> | --module-roundtrip <Module>");
+		Console.WriteLine("Usage: ManualPowerToysCheck --state | --fire <Tool> | --awake-roundtrip | --theme-roundtrip | --theme <dark|light|toggle> | --layout-roundtrip <monitor> | --module <Module> <on|off|toggle> | --module-roundtrip <Module>");
 		return 2;
 }

@@ -33,15 +33,62 @@ internal sealed class RegistryThemeReader : IThemeReader
 	}
 }
 
+internal interface ILightSwitchSignal
+{
+	/// <summary>
+	/// Starts waiting for Light Switch to finish a toggle; true when it did within <paramref name="timeout"/>.
+	/// Null when Light Switch offers no such signal.
+	/// </summary>
+	Task<bool>? WaitForToggleDone(TimeSpan timeout);
+}
+
+/// <summary>
+/// Light Switch sets its manual-reset override event as the last step of every toggle. Its service
+/// resets it, but a set releases every thread already waiting, so waiting here takes nothing from it.
+/// </summary>
+internal sealed class LightSwitchOverrideSignal : ILightSwitchSignal
+{
+	private const string OverrideEvent = "POWERTOYS_LIGHTSWITCH_MANUAL_OVERRIDE";
+
+	public Task<bool>? WaitForToggleDone(TimeSpan timeout)
+	{
+		EventWaitHandle? opened;
+		try
+		{
+			if (!EventWaitHandle.TryOpenExisting(OverrideEvent, out opened)) return null;
+		}
+		catch (UnauthorizedAccessException)
+		{
+			return null;
+		}
+
+		var handle = opened;
+		var done = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		RegisteredWaitHandle? registration = null;
+		registration = ThreadPool.RegisterWaitForSingleObject(handle, (_, timedOut) =>
+		{
+			done.TrySetResult(!timedOut);
+			registration?.Unregister(null);
+			handle.Dispose();
+		}, null, timeout, executeOnlyOnce: true);
+		return done.Task;
+	}
+}
+
 /// <summary>
 /// Light Switch exposes only a toggle event, so "dark" and "light" read the current theme first and
-/// toggle only when it differs. A toggle counts once the registry shows the flip.
+/// toggle only when it differs. A toggle counts once the registry shows the flip and Light Switch has
+/// finished: its toggle event is auto-reset and is reset again after each toggle, so a toggle sent while
+/// one is still running is lost.
 /// </summary>
-internal sealed class ThemeControl(EventTrigger trigger, IThemeReader reader, TimeProvider time, TimeSpan? confirmWindow = null) : IDisposable
+internal sealed class ThemeControl(EventTrigger trigger, IThemeReader reader, ILightSwitchSignal signal, TimeProvider time, TimeSpan? confirmWindow = null) : IDisposable
 {
+	// On PowerToys 0.101 the apps theme flipped 4.7 to 6 s after the toggle, and the toggle ended about 9 s after it.
+	internal static readonly TimeSpan DefaultConfirmWindow = TimeSpan.FromSeconds(15);
+
 	private static readonly TimeSpan Poll = TimeSpan.FromMilliseconds(100);
 
-	private readonly TimeSpan _confirmWindow = confirmWindow ?? TimeSpan.FromSeconds(3);
+	private readonly TimeSpan _confirmWindow = confirmWindow ?? DefaultConfirmWindow;
 	private readonly SemaphoreSlim _gate = new(1, 1);
 
 	public Theme? Current() => reader.Current();
@@ -62,6 +109,9 @@ internal sealed class ThemeControl(EventTrigger trigger, IThemeReader reader, Ti
 
 			if (before == target) return ThemeOutcome.NoChange;
 
+			// Waiting starts before the toggle, so the end of this toggle cannot slip past.
+			var finished = signal.WaitForToggleDone(_confirmWindow);
+
 			switch (trigger.Trigger(PowerToysTool.LightSwitchToggle))
 			{
 				case TriggerResult.NotRunning:
@@ -73,7 +123,7 @@ internal sealed class ThemeControl(EventTrigger trigger, IThemeReader reader, Ti
 			var deadline = time.GetUtcNow() + _confirmWindow;
 			while (time.GetUtcNow() < deadline)
 			{
-				if (reader.Current() == target) return ThemeOutcome.Applied;
+				if (reader.Current() == target && (finished is null || finished.IsCompleted)) return ThemeOutcome.Applied;
 				await Task.Delay(Poll, ct).ConfigureAwait(false);
 			}
 

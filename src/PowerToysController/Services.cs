@@ -27,7 +27,7 @@ internal static class Services
 			var paths = PowerToysLocator.FindInstalled() ?? new PowerToysPaths("", PowerToysPaths.DefaultDataRoot);
 			var locator = new PowerToysLocator(processes, PowerToysLocator.FindInstalled, path => SafeRead(files, path));
 			var awake = new AwakeControl(files, paths, TimeProvider.System);
-			var theme = new ThemeControl(new EventTrigger(new WindowsNamedEventOpener()), new RegistryThemeReader(), TimeProvider.System);
+			var theme = new ThemeControl(new EventTrigger(new WindowsNamedEventOpener()), new RegistryThemeReader(), new LightSwitchOverrideSignal(), TimeProvider.System);
 			var modules = new ModuleToggle(files, PowerToysLocator.FindInstalled, processes, new WindowsRunnerControl(new WmiProcessStarter(), table),
 				PowerToysLocator.IsPolicyForced, TimeProvider.System);
 			var fancyZones = new FancyZonesControl(files, PowerToysLocator.FindInstalled, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);

@@ -31,7 +31,7 @@ internal sealed class TestRig
 		var locator = new PowerToysLocator(Runner, find, Files.Read);
 		var trigger = new EventTrigger(Events);
 		var awake = new AwakeControl(Files, Paths, TimeProvider.System);
-		var theme = new ThemeControl(new EventTrigger(Theme), Theme, TimeProvider.System, TimeSpan.FromMilliseconds(300));
+		var theme = new ThemeControl(new EventTrigger(Theme), Theme, Theme, TimeProvider.System, TimeSpan.FromMilliseconds(300));
 		var modules = new ModuleToggle(Files, find, Runner, Runner, _ => false, TimeProvider.System, TimeSpan.FromMilliseconds(300));
 		var fancyZones = new FancyZonesControl(Files, find, Cli, Signals, TimeProvider.System, TimeSpan.Zero, TimeSpan.FromMilliseconds(300));
 		var state = new StateService(locator, awake, theme, modules, Serilog.Core.Logger.None, _ => Task.FromResult(fancyZones.CurrentMonitors()));
