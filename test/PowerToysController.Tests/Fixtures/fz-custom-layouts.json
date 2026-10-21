@@ -1,0 +1,119 @@
+{
+  "custom-layouts": [
+    {
+      "uuid": "{E2D55CC1-5F19-4C36-BB72-12C519ACAEA3}",
+      "name": "1 - Primary",
+      "type": "grid",
+      "info": {
+        "rows": 2,
+        "columns": 1,
+        "rows-percentage": [
+          3255,
+          6745
+        ],
+        "columns-percentage": [
+          10000
+        ],
+        "cell-child-map": [
+          [
+            0
+          ],
+          [
+            1
+          ]
+        ],
+        "show-spacing": true,
+        "spacing": 0,
+        "sensitivity-radius": 0
+      }
+    },
+    {
+      "uuid": "{782F97B6-9A03-48E3-A236-3EC9892CFC88}",
+      "name": "2 - Primary Short",
+      "type": "grid",
+      "info": {
+        "rows": 2,
+        "columns": 1,
+        "rows-percentage": [
+          2825,
+          7175
+        ],
+        "columns-percentage": [
+          10000
+        ],
+        "cell-child-map": [
+          [
+            0
+          ],
+          [
+            1
+          ]
+        ],
+        "show-spacing": false,
+        "spacing": 0,
+        "sensitivity-radius": 0
+      }
+    },
+    {
+      "uuid": "{7972E5A3-E9A8-4A13-8B77-602EFBB52ED4}",
+      "name": "Stacked",
+      "type": "grid",
+      "info": {
+        "rows": 3,
+        "columns": 1,
+        "rows-percentage": [
+          3255,
+          3356,
+          3389
+        ],
+        "columns-percentage": [
+          10000
+        ],
+        "cell-child-map": [
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ]
+        ],
+        "show-spacing": true,
+        "spacing": 0,
+        "sensitivity-radius": 0
+      }
+    },
+    {
+      "uuid": "{43CB88B6-0F81-42D3-B7CD-DCCBFA45CB5C}",
+      "name": "Stacked Left",
+      "type": "grid",
+      "info": {
+        "rows": 2,
+        "columns": 2,
+        "rows-percentage": [
+          5001,
+          4999
+        ],
+        "columns-percentage": [
+          5000,
+          5000
+        ],
+        "cell-child-map": [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "show-spacing": false,
+        "spacing": 16,
+        "sensitivity-radius": 20
+      }
+    }
+  ]
+}

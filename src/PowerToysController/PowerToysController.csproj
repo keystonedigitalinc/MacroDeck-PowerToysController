@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<!-- Pinned: manifest.json names this executable, and the generated Strings class lives in this namespace. -->
+		<AssemblyName>PowerToysController</AssemblyName>
+		<RootNamespace>KeystoneDigital.PowerToysController</RootNamespace>
+		<IsPackable>false</IsPackable>
+		<!-- LibraryImport source generation for the HID P/Invokes. -->
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<UserSecretsId>PowerToysController-PluginDevelopment</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MacroDeck.Plugin.Analyzers" PrivateAssets="all" />
+		<PackageReference Include="MacroDeck.Localization" />
+		<PackageReference Include="MacroDeck.Plugin.Hosting" />
+		<PackageReference Include="MacroDeck.Plugin.Serilog" />
+		<PackageReference Include="MacroDeck.Sdk" />
+		<PackageReference Include="System.Management" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="PowerToysController.Tests" />
+		<InternalsVisibleTo Include="ManualPowerToysCheck" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="manifest.json" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="Assets\icon.png" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+</Project>
