@@ -3,7 +3,7 @@
 Checked against Creator Guidelines **version 6** and the SDK policy on 2026-10-17. Re-read both before every submission, because they change:
 
 - https://api.macro-deck.app/api/v1/public/creator-guidelines (the `X-Creator-Guidelines-Version` header gives the version)
-- https://api.macro-deck.app/api/v1/public/dependency-policy/sdk (minimum SDK and CLI at that date: `3.0.0-beta.17`)
+- https://api.macro-deck.app/api/v1/public/dependency-policy/sdk (minimum SDK and CLI on 2026-10-21: `3.0.0-beta.18`)
 - https://api.macro-deck.app/api/v1/public/dependency-policy/blocked-packages (empty at that date)
 
 ## Status
@@ -11,7 +11,7 @@ Checked against Creator Guidelines **version 6** and the SDK policy on 2026-10-1
 | Item | State |
 | --- | --- |
 | Public GitHub repository, MIT `LICENSE` | Done: https://github.com/keystonedigitalinc/MacroDeck-PowerToysController |
-| SDK at or above the Store minimum | Done: `3.0.0-beta.17` |
+| SDK at or above the Store minimum | Done: `3.0.0-beta.18` |
 | Package ID names the developer, not Microsoft | Done: `com.keystonedigital.powertoys` |
 | Display name implies no official relationship | Done: "PowerToys Controller" (describes what it controls; section 5 allows a product name used descriptively). "Unofficial" leads both descriptions |
 | `publisher.name` equals the Creator Portal owner | Done: `Keystone Digital`, the existing Portal organization |
@@ -20,7 +20,7 @@ Checked against Creator Guidelines **version 6** and the SDK policy on 2026-10-1
 | Nothing happens without the user (lesson from the Razer review) | Done: every write, restart and launch comes from a button press. The background state check only reads files and the registry |
 | What the plugin changes is disclosed (lesson from the Razer review) | Done: README "What the plugin changes", the module action's description, and the Store description |
 | CI on every push | Done: `.github/workflows/ci.yml`, Windows runner |
-| Store release workflow | Done: `.github/workflows/release.yml`, `cli-version: 3.0.0-beta.17`, no `build-per-platform` |
+| Store release workflow | Done: `.github/workflows/release.yml`, `cli-version: 3.0.0-beta.18`, no `build-per-platform` |
 | Publication validation | Done: 0 errors, 0 warnings (`macrodeck-plugin validate --artifact ... --level Publication`) |
 | Conformance | Done in CI: 33 passed, 0 failed, 16 skipped |
 | Tested by the publisher (section 6) | Done: all tools, Awake, module toggle, layout apply and cycle, FancyZones editor, inside Macro Deck too. Theme toggle and Workspaces done 2026-10-17. |
