@@ -18,6 +18,10 @@ Tested with PowerToys 0.101 and 0.102 on Windows 10 22H2.
 
 The tools are triggered by the same signals PowerToys' own Command Palette and Quick Access use, so they keep working if you change or remove the shortcuts.
 
+## Icons
+
+The plugin ships the "PowerToys Controller Icons" pack: 58 flat white icons, one for every action and state above, pure white on a transparent background so Macro Deck's icon colour setting can recolour them. Macro Deck adds the pack when you install the plugin and keeps it in step on updates. The icons were made with AI help and are covered by this repository's MIT licence. The pack file is `src/PowerToysController/icon-packs/icons.macroDeckIconPack`.
+
 ## Things to know
 
 - **The module must be on.** A tool whose module is off in PowerToys reports "turned off in PowerToys"; the plugin never turns modules on by itself. Light Switch, Awake, Workspaces and the mouse utilities are off by default in PowerToys.
