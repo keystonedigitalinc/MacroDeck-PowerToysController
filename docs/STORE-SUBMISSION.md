@@ -68,7 +68,7 @@ WHAT IT DOES
 - Variables for PowerToys' status and version, Awake, the theme, which modules are on, and the active layout per monitor
 
 REQUIRES
-- Windows, Microsoft PowerToys (tested with 0.101 and 0.102) and Macro Deck 3
+- Windows, Microsoft PowerToys (tested with 0.102.2933) and Macro Deck 3
 - PowerToys must not run as administrator. Windows blocks Macro Deck from reaching it, and powertoys_status shows elevated
 - A tool works only while its module is on in PowerToys. Light Switch, Awake, Workspaces and the mouse utilities are off by default
 

@@ -2,7 +2,7 @@
 
 An unofficial Macro Deck 3 plugin that controls Microsoft PowerToys from your deck without relying on its keyboard shortcuts. Not affiliated with or endorsed by Microsoft.
 
-Tested with PowerToys 0.101 and 0.102 on Windows 10 22H2.
+Tested with PowerToys 0.102.2933 on Windows 10 22H2 (earlier releases tested with 0.101.2362).
 
 ## What it does
 
@@ -48,7 +48,7 @@ The plugin sends nothing over the network.
 | Variable | Value |
 | --- | --- |
 | `powertoys_status` | `ready`, `not_running`, `not_installed`, `elevated`, `restarting` |
-| `powertoys_version` | For example `0.101.2362` |
+| `powertoys_version` | For example `0.102.2933` |
 | `powertoys_awake_mode` | `off`, `indefinite`, `timed`, `until` |
 | `powertoys_awake_display_on` | `true` / `false` |
 | `powertoys_theme` | `dark` / `light` (apps theme) |
