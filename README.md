@@ -2,7 +2,7 @@
 
 An unofficial Macro Deck 3 plugin that controls Microsoft PowerToys from your deck without relying on its keyboard shortcuts. Not affiliated with or endorsed by Microsoft.
 
-Tested with PowerToys 0.101 on Windows 10 22H2.
+Tested with PowerToys 0.101 and 0.102 on Windows 10 22H2.
 
 ## What it does
 
