@@ -1,13 +1,20 @@
 # Status and next steps
 
-Last updated 2026-10-17. All features live-tested. Next: screenshots, then merge PR #1 and follow docs/STORE-SUBMISSION.md. No manifest version bump: the release tag sets it. Read this first when picking the project back up.
+Last updated 2026-10-24. v1.0.0 is built and accepted by the Platform; next is Submit for Review in the Creator Portal (see docs/STORE-SUBMISSION.md). Read this first when picking the project back up.
 
 ## Where it stands
 
-- Branch `feature/md3-plugin`, draft PR #1 on `keystonedigitalinc/MacroDeck-PowerToysController` (public). CI green.
-- Plan fully executed, final review done, all critical and important findings fixed. 95/95 tests, 0 warnings.
+- `main` at PR #2 (SDK and CLI 3.0.0-beta.18, the Store minimum on 2026-10-24). CI green. 95/95 tests, 0 warnings.
+- GitHub release `v1.0.0` (commit `f1c71ad`) built, passed conformance in CI and was accepted by the Platform on 2026-10-21 (run 39678312411). That is the build to submit.
+- A local rebuild of the same commit as 1.0.0 passes `validate --level Publication` with 0 errors and 0 warnings.
 - Ledger with every ruling and deferred minor: `.superpowers/sdd/2026-10-16-powertoys-controller/progress.md` (git-ignored, local only).
-- Package built: `D:\com.keystonedigital.powertoys-0.1.0-win-x64.macroDeckPlugin` (also in `artifacts/`).
+
+## Retest 2026-10-24 (Macro Deck 3.0.0-beta.19, PowerToys 0.102.2933, user watching)
+
+- The 1.0.0 package loads in beta.19 with no host errors and reports PowerToys `ready`.
+- All 15 trigger event names match PowerToys v0.102.2933.0 `shared_constants.h`.
+- Fired live: Color Picker, Text Extractor, Screen Ruler (a toggle: a second fire closes it), theme toggle and back, FancyZones editor; layout apply on monitor 2 and restore; Workspaces launcher; module toggle (Peek off and on, PowerToys restarted each time, enabled map identical afterwards).
+- Not retested: Awake (module off on this PC).
 
 ## Live session results (2026-10-16, user watching, via `tools/ManualPowerToysCheck`)
 
@@ -26,8 +33,7 @@ Last updated 2026-10-17. All features live-tested. Next: screenshots, then merge
 
 ## Before the Store
 
-1. User installs the package in Macro Deck 3 and tests real buttons (Color Picker, a layout, Awake with the module enabled).
-2. Real icon: done 2026-10-17 (neon toolbox, 512x512).
-3. No version bump: release tag `v1.0.0` sets the version (Razer lesson).
-4. Showcase profile and screenshots.
-5. Merge PR #1, create the Creator Portal project, connect GitHub, release v1.0.0. Follow `docs/STORE-SUBMISSION.md` and the Razer project's lessons (CLI 3.0.0-beta.17, no `build-per-platform`).
+1. Done: package tested in Macro Deck 3, real icon, screenshots, Portal project, GitHub connection, release v1.0.0.
+2. To do (user): in the Creator Portal, Create release from the v1.0.0 build, Add to submission, Submit for Review, with the moderator note from docs/STORE-SUBMISSION.md.
+3. To do (user): icon pack `com.keystonedigital.powertoys-icons` from the 58 white icons, exported from Macro Deck.
+4. A fix after review ships as GitHub release v1.0.1. Bump nothing in the repository: the tag sets the version.

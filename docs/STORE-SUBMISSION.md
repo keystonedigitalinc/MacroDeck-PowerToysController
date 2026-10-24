@@ -23,11 +23,11 @@ Checked against Creator Guidelines **version 6** and the SDK policy on 2026-10-1
 | Store release workflow | Done: `.github/workflows/release.yml`, `cli-version: 3.0.0-beta.18`, no `build-per-platform` |
 | Publication validation | Done: 0 errors, 0 warnings (`macrodeck-plugin validate --artifact ... --level Publication`) |
 | Conformance | Done in CI: 33 passed, 0 failed, 16 skipped |
-| Tested by the publisher (section 6) | Done: all tools, Awake, module toggle, layout apply and cycle, FancyZones editor, inside Macro Deck too. Theme toggle and Workspaces done 2026-10-17. |
+| Tested by the publisher (section 6) | Done: all tools, Awake, module toggle, layout apply and cycle, FancyZones editor, inside Macro Deck too. Theme toggle and Workspaces done 2026-10-17. Retested 2026-10-24 on Macro Deck 3.0.0-beta.19 and PowerToys 0.102.2933: all 15 trigger events unchanged; tools, theme toggle, layout apply, Workspaces and module toggle work |
 | Icon (section 10) | Done: blue zone grid with a steel gear and the name "PowerToys Controller". No Macro Deck logo. Source in `docs/branding/icon-source.png`; the package ships a 512 px copy. The icon pack's Portal icon is `docs/branding/icon-pack-logo.png` |
-| Screenshots of real use (section 10) | To do |
-| Creator Portal project and GitHub connection | To do |
-| Release `v1.0.0` | To do |
+| Screenshots of real use (section 10) | Done 2026-10-24 by the publisher |
+| Creator Portal project and GitHub connection | Done |
+| Release `v1.0.0` | Done 2026-10-21: commit `f1c71ad`, run 39678312411, accepted by the Platform (HTTP 200). Ready to add to a submission |
 
 ## Your steps in the Creator Portal
 
@@ -68,7 +68,7 @@ WHAT IT DOES
 - Variables for PowerToys' status and version, Awake, the theme, which modules are on, and the active layout per monitor
 
 REQUIRES
-- Windows, Microsoft PowerToys (tested with 0.101) and Macro Deck 3
+- Windows, Microsoft PowerToys (tested with 0.101 and 0.102) and Macro Deck 3
 - PowerToys must not run as administrator. Windows blocks Macro Deck from reaching it, and powertoys_status shows elevated
 - A tool works only while its module is on in PowerToys. Light Switch, Awake, Workspaces and the mouse utilities are off by default
 
