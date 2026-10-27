@@ -18,7 +18,8 @@ internal enum ModuleOutcome
 
 /// <summary>
 /// PowerToys reads its module map only at startup and accepts live changes only from its own signed
-/// Settings app, so a toggle stops PowerToys, writes the map, and starts it again. Stopping comes first
+/// Settings app. A toggle first flips the module's switch in that Settings app, which applies it live.
+/// When that is not possible, it stops PowerToys, writes the map, and starts it again. Stopping comes first
 /// so PowerToys cannot write its own copy of the settings over ours on the way out. Once PowerToys has
 /// been stopped it is always started again, whatever fails in between. A PowerToys that was not running
 /// stays closed; the change applies on its next start.
@@ -30,7 +31,8 @@ internal sealed class ModuleToggle(
 	IRunnerControl runner,
 	Func<string, bool> isPolicyForced,
 	TimeProvider time,
-	TimeSpan? restartWindow = null) : IDisposable
+	TimeSpan? restartWindow = null,
+	ISettingsUi? settingsUi = null) : IDisposable
 {
 	private static readonly TimeSpan Poll = TimeSpan.FromMilliseconds(250);
 
@@ -66,12 +68,35 @@ internal sealed class ModuleToggle(
 				return TryWrite(location, json, module, target) ? ModuleOutcome.Applied : ModuleOutcome.Failed;
 			}
 
+			if (settingsUi is not null)
+			{
+				switch (await settingsUi.SetAsync(location, module, target, ct).ConfigureAwait(false))
+				{
+					case SettingsUiOutcome.Applied or SettingsUiOutcome.NoChange:
+						return await HeldWithinAsync(location, module, target, _restartWindow).ConfigureAwait(false) ? ModuleOutcome.Applied : ModuleOutcome.Timeout;
+					case SettingsUiOutcome.Failed when Holds(location, module, target):
+						return ModuleOutcome.Applied;
+				}
+			}
+
 			return await RestartWithAsync(location, json, module, target, ct).ConfigureAwait(false);
 		}
 		finally
 		{
 			_gate.Release();
 		}
+	}
+
+	private async Task<bool> HeldWithinAsync(PowerToysPaths location, string module, bool target, TimeSpan window)
+	{
+		var deadline = time.GetUtcNow() + window;
+		while (!Holds(location, module, target))
+		{
+			if (time.GetUtcNow() >= deadline) return false;
+			await Task.Delay(Poll, CancellationToken.None).ConfigureAwait(false);
+		}
+
+		return true;
 	}
 
 	public void Dispose() => _gate.Dispose();

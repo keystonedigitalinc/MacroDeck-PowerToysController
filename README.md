@@ -2,16 +2,19 @@
 
 An unofficial Macro Deck 3 plugin that controls Microsoft PowerToys from your deck without relying on its keyboard shortcuts. Not affiliated with or endorsed by Microsoft.
 
-Tested with PowerToys 0.102.2933 on Windows 10 22H2 (earlier releases tested with 0.101.2362).
+Tested with PowerToys 0.102.3001 on Windows 10 22H2 (earlier releases tested with 0.101.2362 and 0.102.2933).
 
 ## What it does
 
 | Action | What it does |
 | --- | --- |
-| Launch PowerToys tool | Color Picker, Text Extractor, Screen Ruler, Shortcut Guide, Command Palette, Always On Top, Crop And Lock (reparent, thumbnail, screenshot), Find My Mouse, Mouse Highlighter, Mouse Crosshairs, Mouse Jump |
+| Launch PowerToys tool | Color Picker, Text Extractor, Screen Ruler, Shortcut Guide, Command Palette, Always On Top, Crop And Lock (reparent, thumbnail, screenshot), Find My Mouse, Mouse Highlighter, Mouse Crosshairs, Mouse Jump, Cursor Wrap (on/off), Advanced Paste, Hosts File Editor, Environment Variables (both also as administrator), Registry Preview, Keyboard Manager editor, Power Display |
+| ZoomIt | Zoom, Draw, Live Zoom, Snip, Snip text (OCR), Snip with dictation, Record screen (a second press stops it), Break timer |
+| Always On Top | Pins or unpins the focused window, or raises or lowers the opacity of a pinned window |
+| Mouse Without Borders | Toggles Easy Mouse, or reconnects to the other computers |
 | Awake | Off, keep awake indefinitely, for N minutes, or until a time. Optionally keeps the screen on. |
 | Windows theme | Toggle, dark or light, through Light Switch |
-| PowerToys module on/off | Turns a module on, off or toggles it. **PowerToys restarts to apply it**, which closes its open windows for a few seconds. If PowerToys isn't running, the change is saved and applies when it next starts. |
+| PowerToys module on/off | Turns a module on, off or toggles it, live, without restarting PowerToys. PowerToys Settings shows for about 2 seconds while the plugin flips the module's switch. Alt Window Cycle, Command Not Found and Power Display have no switch the plugin can reach, so PowerToys restarts for those. If PowerToys isn't running, the change is saved and applies when it next starts. |
 | Apply FancyZones layout | Any custom layout or template, on one monitor or on all monitors. Cycle mode steps through the layouts you tick, one per press |
 | Open FancyZones editor | Opens the layout editor |
 | Launch PowerToys Workspace | Opens a saved Workspace |
@@ -34,10 +37,10 @@ The plugin ships the "PowerToys Controller Icons" pack: 58 flat white icons, one
 The plugin changes nothing until you press a button. It never acts in the background, and it never turns a module on by itself.
 
 - **Awake** writes the mode into Awake's own settings file, `%LOCALAPPDATA%\Microsoft\PowerToys\Awake\settings.json`. Awake picks the change up live.
-- **Module on/off** changes one entry of the `enabled` list in `%LOCALAPPDATA%\Microsoft\PowerToys\settings.json`, the same entry PowerToys Settings changes. PowerToys reads that list only at startup and accepts live changes only from its own Settings app. So the plugin ends the PowerToys processes in your Windows session, writes the entry, and starts PowerToys again. Apps that you opened from PowerToys keep running. If PowerToys wasn't running, the plugin only writes the entry.
+- **Module on/off** goes through PowerToys' own Settings app, because PowerToys accepts live module changes only from it. The plugin opens Settings on the module's page (`PowerToys.exe --open-settings=<page>`), flips the module's Enable switch with Windows UI Automation, and closes the window again unless it was already open. If the switch can't be found, for example after a PowerToys update moved it, the plugin falls back to a restart. It ends the PowerToys processes in your Windows session, changes the module's entry in the `enabled` list of `%LOCALAPPDATA%\Microsoft\PowerToys\settings.json`, and starts PowerToys again. Apps that you opened from PowerToys keep running. If PowerToys wasn't running, the plugin only writes the entry.
 - **FancyZones layouts** are applied with `FancyZonesCLI.exe`, which ships with PowerToys.
 - **Workspaces** are opened with PowerToys' own `PowerToys.WorkspacesLauncher.exe`.
-- **Tools, the theme and the FancyZones editor** are opened with the same signals PowerToys' Command Palette and Quick Access send.
+- **Tools, ZoomIt, Always On Top, Mouse Without Borders, the theme and the FancyZones editor** are triggered with the same signals PowerToys' Command Palette and Quick Access send.
 
 PowerToys and the Workspaces launcher are started through Windows Management Instrumentation (`Win32_Process.Create`), not as children of the plugin. Macro Deck ends a plugin's child processes when it restarts or updates the plugin, and this would otherwise close PowerToys or your Workspace apps too.
 
@@ -60,7 +63,7 @@ The plugin sends nothing over the network.
 - **`not_running`**: start PowerToys.
 - **`not_installed`**: install PowerToys from Microsoft (Store, winget or GitHub).
 - **`elevated`**: in PowerToys Settings → General, turn off "Always run as administrator", then restart PowerToys.
-- **`restarting`**: a module toggle is in progress. Wait a few seconds.
+- **`restarting`**: a module toggle that needs a PowerToys restart is in progress. Wait a few seconds.
 - **A tool button says "turned off in PowerToys"**: enable that module in PowerToys Settings, or with the module on/off action.
 
 ## Development

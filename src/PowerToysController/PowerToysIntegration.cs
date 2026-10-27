@@ -15,6 +15,7 @@ public sealed class PowerToysIntegration : IPluginIntegration, IVariableProvider
 		Actions =
 		[
 			new LaunchToolAction(components),
+			.. ModuleToolAction.All(components),
 			new AwakeAction(components, TimeProvider.System),
 			new ThemeAction(components),
 			new ModuleAction(components),

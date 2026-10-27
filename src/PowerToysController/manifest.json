@@ -4,7 +4,7 @@
   "id": "com.keystonedigital.powertoys",
   "name": "PowerToys Controller",
   "version": "0.1.0",
-  "description": "Unofficial plugin to control Microsoft PowerToys from Macro Deck: launch Color Picker, Text Extractor, Screen Ruler, Command Palette and other tools without hotkeys, set Awake, switch the theme, turn modules on or off, apply FancyZones layouts and launch Workspaces. Not affiliated with or endorsed by Microsoft.",
+  "description": "Unofficial plugin to control Microsoft PowerToys from Macro Deck: launch Color Picker, Text Extractor, Screen Ruler, Command Palette and other tools without hotkeys, run ZoomIt tools such as Draw, Snip and Record, set Awake, switch the theme, turn modules on or off live, apply FancyZones layouts and launch Workspaces. Not affiliated with or endorsed by Microsoft.",
   "icon": "Assets/icon.png",
   "entrypoints": {
     "win-x64": {

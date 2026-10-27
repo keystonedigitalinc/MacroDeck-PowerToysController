@@ -29,7 +29,7 @@ internal static class Services
 			var awake = new AwakeControl(files, paths, TimeProvider.System);
 			var theme = new ThemeControl(new EventTrigger(new WindowsNamedEventOpener()), new RegistryThemeReader(), new LightSwitchOverrideSignal(), TimeProvider.System);
 			var modules = new ModuleToggle(files, PowerToysLocator.FindInstalled, processes, new WindowsRunnerControl(new WmiProcessStarter(), table),
-				PowerToysLocator.IsPolicyForced, TimeProvider.System);
+				PowerToysLocator.IsPolicyForced, TimeProvider.System, settingsUi: new WindowsSettingsUi(new WmiProcessStarter()));
 			var fancyZones = new FancyZonesControl(files, PowerToysLocator.FindInstalled, new ProcessRunner(), new FancyZonesSignals(), TimeProvider.System);
 			var state = new StateService(locator, awake, theme, modules, logger, _ => Task.FromResult(fancyZones.CurrentMonitors()));
 			return new PowerToysComponents(locator, state, new EventTrigger(new WindowsNamedEventOpener()), awake, theme, modules, fancyZones, new WorkspacesControl(files, PowerToysLocator.FindInstalled, new WmiProcessStarter()));

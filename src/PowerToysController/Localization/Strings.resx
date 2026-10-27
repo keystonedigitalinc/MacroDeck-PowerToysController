@@ -67,6 +67,93 @@
   <data name="Actions.LaunchTool.Tools.MouseJump" xml:space="preserve">
     <value>Mouse Jump</value>
   </data>
+  <data name="Actions.LaunchTool.Tools.CursorWrap" xml:space="preserve">
+    <value>Cursor Wrap (toggle)</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.AdvancedPaste" xml:space="preserve">
+    <value>Advanced Paste</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.Hosts" xml:space="preserve">
+    <value>Hosts File Editor</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.HostsAdmin" xml:space="preserve">
+    <value>Hosts File Editor (as administrator)</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.EnvironmentVariables" xml:space="preserve">
+    <value>Environment Variables</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.EnvironmentVariablesAdmin" xml:space="preserve">
+    <value>Environment Variables (as administrator)</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.RegistryPreview" xml:space="preserve">
+    <value>Registry Preview</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.KeyboardManagerEditor" xml:space="preserve">
+    <value>Keyboard Manager editor</value>
+  </data>
+  <data name="Actions.LaunchTool.Tools.PowerDisplay" xml:space="preserve">
+    <value>Power Display</value>
+  </data>
+  <data name="Actions.ModuleTool.Command.Label" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="Actions.ZoomIt.Name" xml:space="preserve">
+    <value>ZoomIt</value>
+  </data>
+  <data name="Actions.ZoomIt.Description" xml:space="preserve">
+    <value>Starts a ZoomIt tool without its keyboard shortcut.</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.Zoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.Draw" xml:space="preserve">
+    <value>Draw</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.LiveZoom" xml:space="preserve">
+    <value>Live Zoom</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.Snip" xml:space="preserve">
+    <value>Snip (screenshot)</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.SnipOcr" xml:space="preserve">
+    <value>Snip text (OCR)</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.SnipDictate" xml:space="preserve">
+    <value>Snip with dictation</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.Record" xml:space="preserve">
+    <value>Record screen</value>
+  </data>
+  <data name="Actions.ZoomIt.Commands.Break" xml:space="preserve">
+    <value>Break timer</value>
+  </data>
+  <data name="Actions.AlwaysOnTop.Name" xml:space="preserve">
+    <value>Always On Top</value>
+  </data>
+  <data name="Actions.AlwaysOnTop.Description" xml:space="preserve">
+    <value>Pins the focused window on top, or changes the opacity of a pinned window.</value>
+  </data>
+  <data name="Actions.AlwaysOnTop.Commands.Pin" xml:space="preserve">
+    <value>Pin or unpin focused window</value>
+  </data>
+  <data name="Actions.AlwaysOnTop.Commands.OpacityUp" xml:space="preserve">
+    <value>Increase opacity</value>
+  </data>
+  <data name="Actions.AlwaysOnTop.Commands.OpacityDown" xml:space="preserve">
+    <value>Decrease opacity</value>
+  </data>
+  <data name="Actions.MouseWithoutBorders.Name" xml:space="preserve">
+    <value>Mouse Without Borders</value>
+  </data>
+  <data name="Actions.MouseWithoutBorders.Description" xml:space="preserve">
+    <value>Turns Easy Mouse on or off, or reconnects to the other computers.</value>
+  </data>
+  <data name="Actions.MouseWithoutBorders.Commands.EasyMouse" xml:space="preserve">
+    <value>Toggle Easy Mouse</value>
+  </data>
+  <data name="Actions.MouseWithoutBorders.Commands.Reconnect" xml:space="preserve">
+    <value>Reconnect</value>
+  </data>
   <data name="Actions.Awake.Name" xml:space="preserve">
     <value>Awake</value>
   </data>

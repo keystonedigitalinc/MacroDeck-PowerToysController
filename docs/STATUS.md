@@ -1,8 +1,18 @@
 # Status and next steps
 
-Last updated 2026-10-24. v1.0.0 is built and accepted by the Platform; next is Submit for Review in the Creator Portal (see docs/STORE-SUBMISSION.md). Read this first when picking the project back up.
+Last updated 2026-10-27. v1.0.2 adds live module toggles and the ZoomIt, Always On Top and Mouse Without Borders commands. Read this first when picking the project back up.
 
-## Where it stands
+## v1.0.2 (2026-10-27, PowerToys 0.102.3001, user watching)
+
+- **Live module toggle.** The runner's Settings and Quick Access pipes accept only Microsoft-signed clients (`requireMicrosoftSignature`), and `PowerToys.DSC.exe set` only writes the file. So `Modules/SettingsUi.cs` opens Settings on the module's page (`PowerToys.exe --open-settings=<page>`), finds the Enable switch by UI Automation id and toggles it. It closes the window if it was not open before. The table of page names and ids comes from `src/settings-ui` at v0.102.3001. If no switch is found, the toggle falls back to the old restart path.
+- Live test: all 36 modules were turned on one at a time from all off. 33 applied live in 2 to 5 s with no restart. AltWindowCycle, CmdNotFound and PowerDisplay have no reachable switch and restarted, as designed.
+- An earlier report that "toggle does nothing" was Peek: it has no visible effect, and the press worked.
+- **New actions:** `zoomit` (8 commands), `always-on-top` (pin, opacity up and down), `mouse-without-borders` (Easy Mouse, reconnect). `launch-tool` gained Cursor Wrap, Advanced Paste, Hosts and Environment Variables (plus admin), Registry Preview, Keyboard Manager editor and Power Display. Every event name was checked against v0.102.3001 and its listener in the module source.
+- Every new command was fired live. ZoomIt Snip text put text on the clipboard. Record stops on a second press. Cursor Wrap and Mouse Without Borders confirmed in their own logs.
+- 117/117 tests, 0 warnings, `validate --level Publication` clean.
+- Not yet tried: hiding the Settings window during a live toggle (it shows for about 2 s).
+
+## Where it stood on 2026-10-24
 
 - `main` at PR #2 (SDK and CLI 3.0.0-beta.18, the Store minimum on 2026-10-24). CI green. 95/95 tests, 0 warnings.
 - GitHub release `v1.0.0` (commit `f1c71ad`) built, passed conformance in CI and was accepted by the Platform on 2026-10-21 (run 39678312411). That is the build to submit.
