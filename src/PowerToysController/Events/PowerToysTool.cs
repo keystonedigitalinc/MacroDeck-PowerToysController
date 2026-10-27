@@ -17,12 +17,33 @@ internal enum PowerToysTool
 	MouseJump,
 	LightSwitchToggle,
 	FancyZonesEditor,
+	ZoomItZoom,
+	ZoomItDraw,
+	ZoomItBreak,
+	ZoomItLiveZoom,
+	ZoomItSnip,
+	ZoomItSnipOcr,
+	ZoomItSnipDictate,
+	ZoomItRecord,
+	AlwaysOnTopOpacityUp,
+	AlwaysOnTopOpacityDown,
+	CursorWrap,
+	MouseWithoutBordersEasyMouse,
+	MouseWithoutBordersReconnect,
+	AdvancedPaste,
+	Hosts,
+	HostsAdmin,
+	EnvironmentVariables,
+	EnvironmentVariablesAdmin,
+	RegistryPreview,
+	KeyboardManagerEditor,
+	PowerDisplay,
 }
 
 /// <summary>
 /// The named events PowerToys' own Command Palette, Quick Access and Run plugin set to trigger a tool,
-/// from src/common/interop/shared_constants.h at v0.101.2362.0. They do not depend on the user's
-/// hotkeys. The module key is the one in the general settings <c>enabled</c> map.
+/// from src/common/interop/shared_constants.h at v0.101.2362.0; the tools from ZoomIt on were added from
+/// v0.102.3001. They do not depend on the user's hotkeys. The module key is the one in the general settings <c>enabled</c> map.
 /// </summary>
 internal static class PowerToysEvents
 {
@@ -43,6 +64,27 @@ internal static class PowerToysEvents
 		PowerToysTool.MouseJump => @"Local\MouseJumpEvent-aa0be051-3396-4976-b7ba-1a9cc7d236a5",
 		PowerToysTool.LightSwitchToggle => @"Local\PowerToys-LightSwitch-ToggleEvent-d8dc2f29-8c94-4ca1-8c5f-3e2b1e3c4f5a",
 		PowerToysTool.FancyZonesEditor => @"Local\FancyZones-ToggleEditorEvent-1e174338-06a3-472b-874d-073b21c62f14",
+		PowerToysTool.ZoomItZoom => @"Local\PowerToysZoomIt-ZoomEvent-1e4190d7-94bc-4ad5-adc0-9a8fd07cb393",
+		PowerToysTool.ZoomItDraw => @"Local\PowerToysZoomIt-DrawEvent-56338997-404d-4549-bd9a-d132b6766975",
+		PowerToysTool.ZoomItBreak => @"Local\PowerToysZoomIt-BreakEvent-17f2e63c-4c56-41dd-90a0-2d12f9f50c6b",
+		PowerToysTool.ZoomItLiveZoom => @"Local\PowerToysZoomIt-LiveZoomEvent-390bf0c7-616f-47dc-bafe-a2d228add20d",
+		PowerToysTool.ZoomItSnip => @"Local\PowerToysZoomIt-SnipEvent-2fd9c211-436d-4f17-a902-2528aaae3e30",
+		PowerToysTool.ZoomItSnipOcr => @"Local\PowerToysZoomIt-SnipOcrEvent-a7c3b1d2-9e4f-4a6b-8d5c-1f2e3a4b5c6d",
+		PowerToysTool.ZoomItSnipDictate => @"Local\PowerToysZoomIt-SnipDictateEvent-4b8e6f10-2c73-4f5a-9b21-7d0a6c5e8f43",
+		PowerToysTool.ZoomItRecord => @"Local\PowerToysZoomIt-RecordEvent-74539344-eaad-4711-8e83-23946e424512",
+		PowerToysTool.AlwaysOnTopOpacityUp => @"Local\AlwaysOnTopIncreaseOpacityEvent-a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		PowerToysTool.AlwaysOnTopOpacityDown => @"Local\AlwaysOnTopDecreaseOpacityEvent-b2c3d4e5-f6a7-8901-bcde-f12345678901",
+		PowerToysTool.CursorWrap => @"Local\CursorWrapTriggerEvent-1f8452b5-4e6e-45b3-8b09-13f14a5900c9",
+		PowerToysTool.MouseWithoutBordersEasyMouse => @"Local\PowerToysMWB-ToggleEasyMouseEvent-a9c8d7b6-e5f4-3c2a-1b0d-9e8f7a6b5c4d",
+		PowerToysTool.MouseWithoutBordersReconnect => @"Local\PowerToysMWB-ReconnectEvent-b8d7c6a5-f4e3-2b1c-0a9d-8e7f6a5b4c3d",
+		PowerToysTool.AdvancedPaste => @"Local\PowerToys_AdvancedPaste_ShowUI",
+		PowerToysTool.Hosts => @"Local\Hosts-ShowHostsEvent-5a0c0aae-5ff5-40f5-95c2-20e37ed671f0",
+		PowerToysTool.HostsAdmin => @"Local\Hosts-ShowHostsAdminEvent-60ff44e2-efd3-43bf-928a-f4d269f98bec",
+		PowerToysTool.EnvironmentVariables => @"Local\PowerToysEnvironmentVariables-ShowEnvironmentVariablesEvent-1021f616-e951-4d64-b231-a8f972159978",
+		PowerToysTool.EnvironmentVariablesAdmin => @"Local\PowerToysEnvironmentVariables-EnvironmentVariablesAdminEvent-8c95d2ad-047c-49a2-9e8b-b4656326cfb2",
+		PowerToysTool.RegistryPreview => @"Local\RegistryPreviewEvent-4C559468-F75A-4E7F-BC4F-9C9688316687",
+		PowerToysTool.KeyboardManagerEditor => @"Local\PowerToysOpenNewKeyboardManagerEvent-9c1d2e3f-4b5a-6c7d-8e9f-0a1b2c3d4e5f",
+		PowerToysTool.PowerDisplay => @"Local\PowerToysPowerDisplay-ToggleEvent-5f1a9c3e-7d2b-4e8f-9a6c-3b5d7e9f1a2c",
 		_ => throw new ArgumentOutOfRangeException(nameof(tool)),
 	};
 
@@ -62,6 +104,16 @@ internal static class PowerToysEvents
 		PowerToysTool.MouseJump => "Mouse Jump",
 		PowerToysTool.LightSwitchToggle => "Light Switch",
 		PowerToysTool.FancyZonesEditor => "FancyZones",
+		>= PowerToysTool.ZoomItZoom and <= PowerToysTool.ZoomItRecord => "ZoomIt",
+		PowerToysTool.AlwaysOnTopOpacityUp or PowerToysTool.AlwaysOnTopOpacityDown => "Always On Top",
+		PowerToysTool.CursorWrap => "Cursor Wrap",
+		PowerToysTool.MouseWithoutBordersEasyMouse or PowerToysTool.MouseWithoutBordersReconnect => "Mouse Without Borders",
+		PowerToysTool.AdvancedPaste => "Advanced Paste",
+		PowerToysTool.Hosts or PowerToysTool.HostsAdmin => "Hosts File Editor",
+		PowerToysTool.EnvironmentVariables or PowerToysTool.EnvironmentVariablesAdmin => "Environment Variables",
+		PowerToysTool.RegistryPreview => "Registry Preview",
+		PowerToysTool.KeyboardManagerEditor => "Keyboard Manager",
+		PowerToysTool.PowerDisplay => "Power Display",
 		_ => throw new ArgumentOutOfRangeException(nameof(tool)),
 	};
 
@@ -80,6 +132,16 @@ internal static class PowerToysEvents
 		PowerToysTool.MouseJump => "MouseJump",
 		PowerToysTool.LightSwitchToggle => "LightSwitch",
 		PowerToysTool.FancyZonesEditor => "FancyZones",
+		>= PowerToysTool.ZoomItZoom and <= PowerToysTool.ZoomItRecord => "ZoomIt",
+		PowerToysTool.AlwaysOnTopOpacityUp or PowerToysTool.AlwaysOnTopOpacityDown => "AlwaysOnTop",
+		PowerToysTool.CursorWrap => "CursorWrap",
+		PowerToysTool.MouseWithoutBordersEasyMouse or PowerToysTool.MouseWithoutBordersReconnect => "MouseWithoutBorders",
+		PowerToysTool.AdvancedPaste => "AdvancedPaste",
+		PowerToysTool.Hosts or PowerToysTool.HostsAdmin => "Hosts",
+		PowerToysTool.EnvironmentVariables or PowerToysTool.EnvironmentVariablesAdmin => "EnvironmentVariables",
+		PowerToysTool.RegistryPreview => "RegistryPreview",
+		PowerToysTool.KeyboardManagerEditor => "Keyboard Manager",
+		PowerToysTool.PowerDisplay => "PowerDisplay",
 		_ => throw new ArgumentOutOfRangeException(nameof(tool)),
 	};
 }

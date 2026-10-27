@@ -24,6 +24,15 @@ internal sealed class LaunchToolAction(PowerToysComponents components) : IAction
 		(PowerToysTool.MouseHighlighter, () => Strings.Actions.LaunchTool.Tools.MouseHighlighter()),
 		(PowerToysTool.MouseCrosshairs, () => Strings.Actions.LaunchTool.Tools.MouseCrosshairs()),
 		(PowerToysTool.MouseJump, () => Strings.Actions.LaunchTool.Tools.MouseJump()),
+		(PowerToysTool.CursorWrap, () => Strings.Actions.LaunchTool.Tools.CursorWrap()),
+		(PowerToysTool.AdvancedPaste, () => Strings.Actions.LaunchTool.Tools.AdvancedPaste()),
+		(PowerToysTool.Hosts, () => Strings.Actions.LaunchTool.Tools.Hosts()),
+		(PowerToysTool.HostsAdmin, () => Strings.Actions.LaunchTool.Tools.HostsAdmin()),
+		(PowerToysTool.EnvironmentVariables, () => Strings.Actions.LaunchTool.Tools.EnvironmentVariables()),
+		(PowerToysTool.EnvironmentVariablesAdmin, () => Strings.Actions.LaunchTool.Tools.EnvironmentVariablesAdmin()),
+		(PowerToysTool.RegistryPreview, () => Strings.Actions.LaunchTool.Tools.RegistryPreview()),
+		(PowerToysTool.KeyboardManagerEditor, () => Strings.Actions.LaunchTool.Tools.KeyboardManagerEditor()),
+		(PowerToysTool.PowerDisplay, () => Strings.Actions.LaunchTool.Tools.PowerDisplay()),
 	];
 
 	public string Id => "launch-tool";
@@ -44,33 +53,98 @@ internal sealed class LaunchToolAction(PowerToysComponents components) : IAction
 
 	public MacroDeckPlatform Platforms => MacroDeckPlatform.Windows;
 
-	public IActionExecutor CreateExecutor() => new Executor(components);
+	public IActionExecutor CreateExecutor() => new ToolExecutor(components, Tools, ToolParameter, () => Strings.Actions.LaunchTool.Tool.Label());
+}
 
-	private sealed class Executor(PowerToysComponents components) : IActionExecutor
+/// <summary>
+/// One PowerToys module's own tools as one action, such as ZoomIt's Draw or Snip, so a deck can trigger
+/// them without the module's keyboard shortcuts.
+/// </summary>
+internal sealed class ModuleToolAction(
+	PowerToysComponents components,
+	string id,
+	Func<LocalizedText> name,
+	Func<LocalizedText> description,
+	IReadOnlyList<(PowerToysTool Tool, Func<LocalizedText> Name)> tools) : IActionDefinition
+{
+	private const string CommandParameter = "command";
+
+	public static IReadOnlyList<ModuleToolAction> All(PowerToysComponents components) =>
+	[
+		new(components, "zoomit", () => Strings.Actions.ZoomIt.Name(), () => Strings.Actions.ZoomIt.Description(),
+		[
+			(PowerToysTool.ZoomItZoom, () => Strings.Actions.ZoomIt.Commands.Zoom()),
+			(PowerToysTool.ZoomItDraw, () => Strings.Actions.ZoomIt.Commands.Draw()),
+			(PowerToysTool.ZoomItLiveZoom, () => Strings.Actions.ZoomIt.Commands.LiveZoom()),
+			(PowerToysTool.ZoomItSnip, () => Strings.Actions.ZoomIt.Commands.Snip()),
+			(PowerToysTool.ZoomItSnipOcr, () => Strings.Actions.ZoomIt.Commands.SnipOcr()),
+			(PowerToysTool.ZoomItSnipDictate, () => Strings.Actions.ZoomIt.Commands.SnipDictate()),
+			(PowerToysTool.ZoomItRecord, () => Strings.Actions.ZoomIt.Commands.Record()),
+			(PowerToysTool.ZoomItBreak, () => Strings.Actions.ZoomIt.Commands.Break()),
+		]),
+		new(components, "always-on-top", () => Strings.Actions.AlwaysOnTop.Name(), () => Strings.Actions.AlwaysOnTop.Description(),
+		[
+			(PowerToysTool.AlwaysOnTop, () => Strings.Actions.AlwaysOnTop.Commands.Pin()),
+			(PowerToysTool.AlwaysOnTopOpacityUp, () => Strings.Actions.AlwaysOnTop.Commands.OpacityUp()),
+			(PowerToysTool.AlwaysOnTopOpacityDown, () => Strings.Actions.AlwaysOnTop.Commands.OpacityDown()),
+		]),
+		new(components, "mouse-without-borders", () => Strings.Actions.MouseWithoutBorders.Name(), () => Strings.Actions.MouseWithoutBorders.Description(),
+		[
+			(PowerToysTool.MouseWithoutBordersEasyMouse, () => Strings.Actions.MouseWithoutBorders.Commands.EasyMouse()),
+			(PowerToysTool.MouseWithoutBordersReconnect, () => Strings.Actions.MouseWithoutBorders.Commands.Reconnect()),
+		]),
+	];
+
+	public string Id => id;
+
+	public LocalizedText Name => name();
+
+	public LocalizedText Description => description();
+
+	public IReadOnlyList<ActionParameter> Parameters { get; } =
+	[
+		ActionParameter.Choice(
+			CommandParameter,
+			[.. tools.Select(tool => Results.Option(tool.Tool.ToString(), tool.Name()))],
+			label: Strings.Actions.ModuleTool.Command.Label(),
+			defaultValue: tools[0].Tool.ToString(),
+			required: true),
+	];
+
+	public MacroDeckPlatform Platforms => MacroDeckPlatform.Windows;
+
+	public IActionExecutor CreateExecutor() => new ToolExecutor(components, tools, CommandParameter, () => Strings.Actions.ModuleTool.Command.Label());
+}
+
+/// <summary>Sets the named event of the chosen tool, after checking that PowerToys and its module are up.</summary>
+internal sealed class ToolExecutor(
+	PowerToysComponents components,
+	IReadOnlyList<(PowerToysTool Tool, Func<LocalizedText> Name)> tools,
+	string parameter,
+	Func<LocalizedText> label) : IActionExecutor
+{
+	public Task<ActionResult> ExecuteAsync(ActionExecutionContext context)
 	{
-		public Task<ActionResult> ExecuteAsync(ActionExecutionContext context)
+		var snapshot = components.State.Current;
+		if (Results.Gate(snapshot) is { } blocked) return Task.FromResult(blocked);
+
+		if (!Enum.TryParse<PowerToysTool>(ParameterReader.String(context.Parameters, parameter), out var tool)
+			|| tools.All(t => t.Tool != tool))
 		{
-			var snapshot = components.State.Current;
-			if (Results.Gate(snapshot) is { } blocked) return Task.FromResult(blocked);
-
-			if (!Enum.TryParse<PowerToysTool>(ParameterReader.String(context.Parameters, ToolParameter), out var tool)
-				|| Tools.All(t => t.Tool != tool))
-			{
-				return Task.FromResult(Results.Invalid(Strings.Actions.LaunchTool.Tool.Label()));
-			}
-
-			var name = PowerToysEvents.ProductName(tool);
-			if (snapshot.Enabled.TryGetValue(PowerToysEvents.ModuleOf(tool), out var on) && !on)
-			{
-				return Task.FromResult(ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff(name)));
-			}
-
-			return Task.FromResult(components.Trigger.Trigger(tool) switch
-			{
-				TriggerResult.Triggered => ActionResult.Success(),
-				TriggerResult.Denied => ActionResult.Failed(ActionErrorCodes.PermissionDenied, Strings.Errors.Elevated()),
-				_ => ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff(name)),
-			});
+			return Task.FromResult(Results.Invalid(label()));
 		}
+
+		var name = PowerToysEvents.ProductName(tool);
+		if (snapshot.Enabled.TryGetValue(PowerToysEvents.ModuleOf(tool), out var on) && !on)
+		{
+			return Task.FromResult(ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff(name)));
+		}
+
+		return Task.FromResult(components.Trigger.Trigger(tool) switch
+		{
+			TriggerResult.Triggered => ActionResult.Success(),
+			TriggerResult.Denied => ActionResult.Failed(ActionErrorCodes.PermissionDenied, Strings.Errors.Elevated()),
+			_ => ActionResult.Failed(ActionErrorCodes.Unavailable, Strings.Errors.ModuleOff(name)),
+		});
 	}
 }

@@ -241,4 +241,91 @@ public sealed class ModuleToggleTests
 		Assert.That(seen, Is.True);
 		Assert.That(toggle.IsRestarting, Is.False);
 	}
+
+	private static (ModuleToggle Toggle, FakeRunner Runner, FakeFileStore Store, FakeSettingsUi Ui) CreateWithUi(SettingsUiOutcome outcome)
+	{
+		var store = new FakeFileStore();
+		store.Files[Paths.GeneralSettings] = Fixture.Text("general-settings.json");
+		var runner = new FakeRunner();
+		var ui = new FakeSettingsUi(store, Paths, outcome);
+		var toggle = new ModuleToggle(store, () => Paths, runner, runner, _ => false, TimeProvider.System, TimeSpan.FromMilliseconds(300), ui);
+		return (toggle, runner, store, ui);
+	}
+
+	[Test]
+	public async Task A_switch_flipped_in_Settings_applies_without_a_restart()
+	{
+		var (toggle, runner, store, ui) = CreateWithUi(SettingsUiOutcome.Applied);
+
+		var outcome = await toggle.SetAsync("ColorPicker", "off", default);
+
+		Assert.That(outcome, Is.EqualTo(ModuleOutcome.Applied));
+		Assert.That(ui.Calls, Is.EqualTo(1));
+		Assert.That(Enabled(store, "ColorPicker"), Is.False);
+		Assert.That(runner.Stops, Is.Zero);
+	}
+
+	[Test]
+	public async Task A_module_without_a_Settings_switch_falls_back_to_a_restart()
+	{
+		var (toggle, runner, store, _) = CreateWithUi(SettingsUiOutcome.Unsupported);
+
+		var outcome = await toggle.SetAsync("ColorPicker", "off", default);
+
+		Assert.That(outcome, Is.EqualTo(ModuleOutcome.Applied));
+		Assert.That(Enabled(store, "ColorPicker"), Is.False);
+		Assert.That(runner.Stops, Is.EqualTo(1));
+	}
+
+	[Test]
+	public async Task A_failed_Settings_attempt_falls_back_to_a_restart()
+	{
+		var (toggle, runner, store, _) = CreateWithUi(SettingsUiOutcome.Failed);
+
+		var outcome = await toggle.SetAsync("ColorPicker", "off", default);
+
+		Assert.That(outcome, Is.EqualTo(ModuleOutcome.Applied));
+		Assert.That(Enabled(store, "ColorPicker"), Is.False);
+		Assert.That(runner.Stops, Is.EqualTo(1));
+	}
+
+	[Test]
+	public async Task A_Settings_switch_that_never_reaches_the_file_is_Timeout_without_a_restart()
+	{
+		var (toggle, runner, _, ui) = CreateWithUi(SettingsUiOutcome.Applied);
+		ui.WritesFile = false;
+
+		Assert.That(await toggle.SetAsync("ColorPicker", "off", default), Is.EqualTo(ModuleOutcome.Timeout));
+		Assert.That(runner.Stops, Is.Zero);
+	}
+
+	[Test]
+	public async Task A_closed_PowerToys_is_written_directly_without_opening_Settings()
+	{
+		var (toggle, runner, store, ui) = CreateWithUi(SettingsUiOutcome.Applied);
+		runner.Running = false;
+
+		Assert.That(await toggle.SetAsync("ColorPicker", "off", default), Is.EqualTo(ModuleOutcome.Applied));
+		Assert.That(ui.Calls, Is.Zero);
+		Assert.That(Enabled(store, "ColorPicker"), Is.False);
+	}
+}
+
+/// <summary>Stands in for PowerToys' Settings app: on success the runner saves the map, as PowerToys does.</summary>
+internal sealed class FakeSettingsUi(FakeFileStore store, PowerToysPaths paths, SettingsUiOutcome outcome) : ISettingsUi
+{
+	public int Calls { get; private set; }
+
+	public bool WritesFile { get; set; } = true;
+
+	public Task<SettingsUiOutcome> SetAsync(PowerToysPaths location, string module, bool target, CancellationToken ct)
+	{
+		Calls++;
+		if (outcome == SettingsUiOutcome.Applied && WritesFile)
+		{
+			store.Files[paths.GeneralSettings] = EnableMap.WithModule(store.Files[paths.GeneralSettings], module, target);
+		}
+
+		return Task.FromResult(outcome);
+	}
 }
